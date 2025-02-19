@@ -6,6 +6,7 @@ const cors = require('cors');
 const contactRoutes = require("./routes/contactRoutes");
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const { authMiddleware, adminMiddleware } = require('./middleware/authMiddleware');
@@ -37,6 +38,10 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'default_secret',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI, // Store sessions in MongoDB
+        collectionName: 'sessions',
+    }),
     cookie: { secure: false }
 }));
 
