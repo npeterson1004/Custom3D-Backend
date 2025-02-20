@@ -27,18 +27,16 @@ const allowedOrigins = [
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: [
+        'http://localhost:5500', 
+        'http://localhost:8000',
+        'https://delicate-yeot-77f124.netlify.app',  // ✅ Netlify Frontend
+        'https://custom3d-backend.onrender.com' // ✅ Render Backend
+    ],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // ✅ Add 'OPTIONS' for preflight requests
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // ✅ Ensure 'OPTIONS' is included
 }));
-
 
 
 app.use(cookieParser());
