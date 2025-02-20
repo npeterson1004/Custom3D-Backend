@@ -13,25 +13,33 @@ const { authMiddleware, adminMiddleware } = require('./middleware/authMiddleware
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const allowedOrigins = ['http://localhost:5500', 'http://localhost:8000'];
 const orderRoutes = require("./routes/orderRoutes"); 
+const allowedOrigins = [
+    'http://localhost:5500', 
+    'http://localhost:8000',
+    'https://delicate-yeot-77f124.netlify.app',  // ✅ Netlify Frontend
+    'https://custom3d-backend.onrender.com' // ✅ Render Backend (Important)
+];
 
 
 
-console.log("MONGO_URI from .env:", process.env.MONGO_URI); // Debugging
+
 const app = express();
-app.use(express.static(path.join(__dirname, "frontend/public")));
 app.use(express.json());
 app.use(cors({
-  origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true);
-      } else {
-          callback(new Error('Not allowed by CORS'));
-      }
-  },
-  credentials: true
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // ✅ Add 'OPTIONS' for preflight requests
 }));
+
+
 
 app.use(cookieParser());
 app.use(session({
@@ -39,12 +47,18 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI, // Store sessions in MongoDB
+        mongoUrl: process.env.MONGO_URI, 
         collectionName: 'sessions',
+        crypto: { secret: process.env.SESSION_SECRET } // Secure session encryption
     }),
-    cookie: { secure: false }
-}));
-
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: 'None'
+    }
+})).on('error', (err) => {
+    console.error("Session Store Error:", err);
+});
 // Connect to MongoDB
 connectDB();
 

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const warehouseContainer = document.getElementById("warehouseContainer");
 
     try {
-        const response = await fetch("http://localhost:5000/api/products");
+        const response = await fetch("https://custom3d-backend.onrender.com/api/products");
         const products = await response.json();
 
         if (!warehouseContainer) {
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const productCard = `
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
-                        <img src="http://localhost:5000${product.image}" class="card-img-top" alt="${product.name}">
+                        <img src="https://custom3d-backend.onrender.com${product.image}" class="card-img-top" alt="${product.name}">
                         <div class="card-body">
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-text">${product.description}</p>
