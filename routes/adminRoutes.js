@@ -6,37 +6,45 @@ const { authMiddleware, adminMiddleware } = require("../middleware/authMiddlewar
 const User = require("../models/User");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
+const { adminLogin } = require("../controllers/authController");
+
+
+
+const Admin = require("../models/Admin");
 
 const router = express.Router();
 
-// ✅ Admin Login API
 router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
 
-        if (!user || user.role !== "admin") {
+        // ✅ Change this to find from the Admin collection
+        const admin = await Admin.findOne({ email });
+
+        if (!admin) {
             return res.status(401).json({ message: "Unauthorized: Admin access only" });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, admin.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
         const token = jwt.sign(
-            { userId: user._id, role: user.role },
-            process.env.JWT_SECRET,
+            { userId: admin._id, role: "admin" }, 
+            process.env.JWT_SECRET, 
             { expiresIn: "1h" }
         );
+
         console.log("Generated Token:", token);
-        res.json({ message: "Login successful", token });
+        res.json({ message: "✅ Login successful!", token });
 
     } catch (error) {
-        console.error("Login Error:", error);
+        console.error("❌ Login Error:", error);
         res.status(500).json({ error: "Server error" });
     }
 });
+
 
 // ✅ Admin Dashboard API
 router.get("/dashboard", authMiddleware, adminMiddleware, async (req, res) => {
@@ -85,5 +93,6 @@ router.get("/orders", async (req, res) => {
     }
 });
 
+router.post("/login", adminLogin);
 
 module.exports = router;

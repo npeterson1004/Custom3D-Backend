@@ -4,24 +4,32 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.adminLogin = async (req, res) => {
-    const { email, password } = req.body;
-
     try {
-        const admin = await Admin.findOne({ email });
-        if (!admin) return res.status(400).json({ message: "Admin not found" });
+        const { email, password } = req.body;
+
+        const admin = await Admin.findOne({ email }); // ✅ Find in Admin collection
+        if (!admin) {
+            console.log("❌ Admin not found");
+            return res.status(400).json({ message: "Admin not found" });
+        }
 
         const isMatch = await bcrypt.compare(password, admin.password);
-        if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+        if (!isMatch) {
+            console.log("❌ Incorrect password");
+            return res.status(401).json({ message: "Invalid credentials" });
+        }
 
-        const token = jwt.sign({ id: admin._id, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(
+            { id: admin._id, role: 'admin' },
+            process.env.JWT_SECRET, { expiresIn: '1h' }
+        );
 
-        res.cookie('token', token, { httpOnly: true, secure: true });
-        res.json({ token, message: "Login successful" });
+        res.json({ token, message: "✅ Login successful!" });
     } catch (error) {
+        console.error("❌ Admin login error:", error);
         res.status(500).json({ message: "Server error" });
     }
 };
-
 
 
 // Register New User
