@@ -10,16 +10,29 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        // ✅ Decode Token First
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            console.error("🚨 Token could not be decoded.");
+            return res.status(403).json({ message: "Invalid Token" });
+        }
+
         console.log("✅ Decoded Token:", decoded);
-        req.user = decoded;
+
+        // ✅ Check Token Expiration
+        if (Date.now() >= decoded.exp * 1000) {
+            console.error("🚨 Token Expired!");
+            return res.status(403).json({ message: "Token Expired" });
+        }
+
+        // ✅ Verify Token Signature
+        req.user = jwt.verify(token, process.env.JWT_SECRET);
         next();
     } catch (error) {
         console.error("🚨 Token Verification Failed:", error.message);
         res.status(403).json({ message: "Invalid Token" });
     }
 };
-
 
 const adminMiddleware = (req, res, next) => {
     if (!req.user || req.user.role !== 'admin') {
@@ -28,25 +41,4 @@ const adminMiddleware = (req, res, next) => {
     next();
 };
 
-
-
-
-/*
-exports.authenticateUser = (req, res, next) => {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
-
-    if (!token) {
-        return res.status(401).json({ message: "❌ Access Denied. No token provided." });
-    }
-
-    try {
-        const decoded = jwt.verify(token, "secretkey"); // Use the same secret key as login
-        req.user = decoded;
-        next();
-    } catch (error) {
-        res.status(403).json({ message: "❌ Invalid token." });
-    }
-};
-
-*/
 module.exports = { authMiddleware, adminMiddleware };

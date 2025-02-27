@@ -60,36 +60,60 @@ exports.registerUser = async (req, res) => {
 // User Login Function
 exports.loginUser = async (req, res) => {
     try {
-        console.log("🔍 Incoming Request Body:", req.body); // Debugging
+        console.log("🔍 Incoming Request Body:", req.body);
 
         const { email, password } = req.body;
         if (!email || !password) {
             return res.status(400).json({ message: "❌ All fields are required." });
         }
 
-        // Find user by email
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: "❌ Invalid email or password." });
         }
 
-        // Compare password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: "❌ Invalid email or password." });
         }
 
-        // Generate JWT Token
-        const token = jwt.sign({ userId: user._id, email: user.email }, "secretkey", { expiresIn: "1h" });
+        const token = jwt.sign(
+            { userId: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
+
+        console.log("✅ Token Generated:", token); // ✅ Debugging
 
         res.status(200).json({ 
             message: "✅ Login successful!", 
             token, 
-            user: { email: user.email }  // ✅ Ensure user email is returned
+            user: { email: user.email }
         });
 
     } catch (error) {
         console.error("❌ Login error:", error);
         res.status(500).json({ message: "❌ Server error. Could not log in." });
+    }
+};
+
+
+exports.verifyToken = async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(" ")[1];
+
+        console.log("🔍 Incoming Token for Verification:", token); // ✅ Debugging
+
+        if (!token) {
+            return res.status(401).json({ message: "No token provided" });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("✅ Token Decoded:", decoded);
+
+        res.json({ message: "Token valid", user: decoded });
+    } catch (error) {
+        console.error("❌ Token Verification Failed:", error.message);
+        res.status(403).json({ message: "Invalid Token" });
     }
 };

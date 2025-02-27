@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-const { registerUser, loginUser } = require("../controllers/authController");
+const { registerUser, loginUser, verifyToken} = require("../controllers/authController");
 const router = express.Router();
 
 
@@ -78,6 +78,7 @@ router.post('/admin/login', async (req, res) => {
     }
 });
 
+router.get("/verify", verifyToken)
 
 
 module.exports = router;
