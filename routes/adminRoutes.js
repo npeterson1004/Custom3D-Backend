@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { authMiddleware, adminMiddleware } = require("../middleware/authMiddleware");
 const { adminLogin } = require("../controllers/authController");
-const User = require("../models/User");che
+const User = require("../models/User");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 
