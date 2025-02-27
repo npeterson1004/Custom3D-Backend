@@ -1,54 +1,45 @@
+//adminLogin.js
+import { API_BASE_URL } from "./config.js";  
 
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ DOM fully loaded, attaching event listener...");
 
-import { API_BASE_URL } from "./config.js";
-document.getElementById("adminLoginForm").addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    console.log("Attempting Admin Login with:", { email, password });
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/admin/login`, { 
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-        console.log("Server Response:", data);
-
-        if (!response.ok) {
-            throw new Error(data.message || "Login failed!");
-        }
-
-        // ✅ Ensure token exists before proceeding
-        if (!data.token) {
-            throw new Error("No token received from server");
-        }
-
-        // ✅ Store token
-        if (data.token) {
-            localStorage.setItem("adminToken", data.token);
-            window.location.href = "admin-dashboard.html";
-        } else {
-            console.error("❌ No token received.");
-        }
-        
-        // ✅ Confirm before redirecting
-        if (localStorage.getItem("adminToken")) {
-            console.log("Redirecting to Admin Dashboard...");
-            window.location.href = "admin-dashboard.html";
-        } else {
-            console.error("❌ Token was NOT stored!");
-        }
-
-    } catch (error) {
-        console.error("Login Error:", error);
-        document.getElementById("errorMessage").textContent = error.message;
-        document.getElementById("errorMessage").style.display = "block";
+    const adminLoginForm = document.getElementById("adminLoginForm");
+    
+    if (!adminLoginForm) {
+        console.error("🚨 adminLoginForm NOT FOUND!");
+        return;
     }
+
+    adminLoginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        console.log("✅ Admin login form submitted!");
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/admin/login`, { 
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            console.log("✅ Sent request to backend");
+
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || "Login failed!");
+            }
+
+            console.log("✅ Login Successful!", data);
+            localStorage.setItem("adminToken", data.token);
+            window.location.href = "admin-dashboard.html"; 
+
+        } catch (error) {
+            console.error("❌ Login Error:", error);
+            document.getElementById("errorMessage").textContent = error.message;
+            document.getElementById("errorMessage").style.display = "block";
+        }
+    });
 });
-
-

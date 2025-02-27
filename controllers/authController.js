@@ -7,7 +7,7 @@ exports.adminLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const admin = await Admin.findOne({ email }); // ✅ Find in Admin collection
+        const admin = await Admin.findOne({ email }); // ✅ Find admin user in the database
         if (!admin) {
             console.log("❌ Admin not found");
             return res.status(400).json({ message: "Admin not found" });
@@ -30,7 +30,6 @@ exports.adminLogin = async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 };
-
 
 // Register New User
 exports.registerUser = async (req, res) => {
