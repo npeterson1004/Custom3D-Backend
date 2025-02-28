@@ -4,22 +4,33 @@ const multer = require('multer');
 const { addProduct } = require("../controllers/productController");
 const Product = require("../models/Product");
 const router = express.Router();
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-
-// Configure Multer for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + "-" + file.originalname);
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'custom3d-uploads',
+        format: async (req, file) => file.mimetype.split('/')[1], // Auto-detect format
+        public_id: (req, file) => `${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`
     }
 });
 
-const upload = multer({ storage: storage });
 
+
+
+
+
+const upload = multer({ storage: storage });
 router.post("/", upload.single("image"), addProduct);
+
+
 
 // Get 3 random products for "Featured Prints"
 router.get("/featured", async (req, res) => {
