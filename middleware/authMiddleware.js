@@ -10,29 +10,29 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        console.log("✅ Decoded Token:", decoded);
-
-        if (!decoded || !decoded.role) {
-            console.error("🚨 Invalid Token Structure. No role found.");
+        // ✅ Decode Token First
+        const decoded = jwt.decode(token);
+        if (!decoded) {
+            console.error("🚨 Token could not be decoded.");
             return res.status(403).json({ message: "Invalid Token" });
         }
 
+        console.log("✅ Decoded Token:", decoded);
+
+        // ✅ Check Token Expiration
         if (Date.now() >= decoded.exp * 1000) {
             console.error("🚨 Token Expired!");
             return res.status(403).json({ message: "Token Expired" });
         }
 
-        req.user = decoded;
+        // ✅ Verify Token Signature
+        req.user = jwt.verify(token, process.env.JWT_SECRET);
         next();
     } catch (error) {
         console.error("🚨 Token Verification Failed:", error.message);
         res.status(403).json({ message: "Invalid Token" });
     }
 };
-
-
 
 const adminMiddleware = (req, res, next) => {
     console.log("🔍 Checking Admin Role:", req.user);
@@ -42,7 +42,6 @@ const adminMiddleware = (req, res, next) => {
         return res.status(403).json({ message: "Forbidden: Admins only" });
     }
 
-    console.log("✅ Admin Authentication Passed.");
     next();
 };
 
