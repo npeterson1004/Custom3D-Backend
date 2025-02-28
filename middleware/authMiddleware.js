@@ -10,7 +10,6 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        // ✅ Verify and Decode Token in One Step
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         console.log("✅ Decoded Token:", decoded);
@@ -20,7 +19,6 @@ const authMiddleware = (req, res, next) => {
             return res.status(403).json({ message: "Invalid Token" });
         }
 
-        // ✅ Ensure Token Hasn't Expired
         if (Date.now() >= decoded.exp * 1000) {
             console.error("🚨 Token Expired!");
             return res.status(403).json({ message: "Token Expired" });
@@ -33,6 +31,7 @@ const authMiddleware = (req, res, next) => {
         res.status(403).json({ message: "Invalid Token" });
     }
 };
+
 
 
 const adminMiddleware = (req, res, next) => {
