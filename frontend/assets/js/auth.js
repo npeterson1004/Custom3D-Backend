@@ -83,16 +83,27 @@ async function getAuthToken() {
             const data = await response.json();
             console.log("🔍 Token Response from Backend:", data); // ✅ Debugging
 
-            if (response.ok && data.token) { // ✅ Ensure token is actually returned
-                token = data.token;
-                localStorage.setItem("token", token);
+            if (response.ok && data.token) {
+                console.log("✅ Storing retrieved token:", data.token);
+                localStorage.setItem("token", data.token);
+                return data.token;
             }
+            
         } catch (error) {
             console.error("❌ Error retrieving token from cookies:", error);
         }
     }
 
-    return token;
+    const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+const expiry = decodedToken.exp * 1000; // Convert to milliseconds
+
+if (Date.now() >= expiry) {
+    console.warn("🚨 Token Expired! Clearing localStorage.");
+    localStorage.removeItem("token");
+    return null;
+}
+
+return token;
 }
 
 
@@ -106,20 +117,32 @@ async function checkLoginStatus() {
         console.log("🔍 Checking Retrieved Token:", token);
 
         if (!token) {
-            document.getElementById("auth-error")?.innerHTML = `<div class="alert alert-warning">Please log in to continue.</div>`;
+            const authErrorElement = document.getElementById("auth-error");
+            if (authErrorElement) {
+                authErrorElement.innerHTML = `<div class="alert alert-warning">Please log in to continue.</div>`;
+            }
+
             return;
         }
 
         try {
             const response = await fetch(`${API_BASE_URL}/api/auth/verify`, {
                 method: "GET",
-                headers: { "Authorization": `Bearer ${token}` }
+                headers: {
+                    "Authorization": token ? `Bearer ${token}` : "",
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
             });
+            
 
             const data = await response.json();
             if (!response.ok) {
                 console.warn("🚨 Token verification failed:", data.message);
-                document.getElementById("auth-error")?.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+                const authErrorElement = document.getElementById("auth-error");
+            if (authErrorElement) {
+               authErrorElement.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+            }
                 localStorage.removeItem("token");
                 localStorage.removeItem("adminToken");
                 return;
@@ -128,7 +151,10 @@ async function checkLoginStatus() {
             console.log("✅ Token Verified. User is logged in.");
         } catch (error) {
             console.error("❌ Error verifying login:", error);
-            document.getElementById("auth-error")?.innerHTML = `<div class="alert alert-danger">Authentication error. Try again.</div>`;
+            const authErrorElement = document.getElementById("auth-error");
+            if (authErrorElement) {
+                authErrorElement.innerHTML = `<div class="alert alert-danger">Authentication error. Try again.</div>`;
+            }
             localStorage.removeItem("token");
             localStorage.removeItem("adminToken");
         }

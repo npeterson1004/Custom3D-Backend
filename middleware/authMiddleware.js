@@ -19,9 +19,11 @@ const authMiddleware = (req, res, next) => {
         console.log("✅ Decoded Token:", decoded);
 
         if (Date.now() >= decoded.exp * 1000) {
-            console.error("🚨 Token Expired!");
-            return res.status(403).json({ message: "Token expired. Please log in again." });
+            console.warn("🚨 Token Expired! Removing invalid token.");
+            res.clearCookie("token"); // Remove invalid session token
+            return res.status(401).json({ message: "Token expired. Please log in again." });
         }
+        
 
         req.user = jwt.verify(token, process.env.JWT_SECRET);
         next();

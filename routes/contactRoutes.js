@@ -1,3 +1,4 @@
+//contact routes
 const express = require("express");
 const { submitContact, getContacts } = require("../controllers/contactController");
 
