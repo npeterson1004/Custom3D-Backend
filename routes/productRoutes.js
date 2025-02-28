@@ -32,15 +32,6 @@ router.get("/featured", async (req, res) => {
     }
 });
 
-router.get("/featured", async (req, res) => {
-    try {
-        const products = await Product.aggregate([{ $sample: { size: 3 } }]); // Fetch 3 random items
-        res.json(products);
-    } catch (error) {
-        console.error("Error fetching featured products:", error);
-        res.status(500).json({ message: "Failed to fetch featured products" });
-    }
-});
 
 
 
