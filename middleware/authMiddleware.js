@@ -10,7 +10,6 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        // ✅ Decode Token First
         const decoded = jwt.decode(token);
         if (!decoded) {
             console.error("🚨 Token could not be decoded.");
@@ -19,13 +18,11 @@ const authMiddleware = (req, res, next) => {
 
         console.log("✅ Decoded Token:", decoded);
 
-        // ✅ Check Token Expiration
         if (Date.now() >= decoded.exp * 1000) {
             console.error("🚨 Token Expired!");
-            return res.status(403).json({ message: "Token Expired" });
+            return res.status(403).json({ message: "Token expired. Please log in again." });
         }
 
-        // ✅ Verify Token Signature
         req.user = jwt.verify(token, process.env.JWT_SECRET);
         next();
     } catch (error) {
@@ -35,8 +32,6 @@ const authMiddleware = (req, res, next) => {
 };
 
 const adminMiddleware = (req, res, next) => {
-    console.log("🔍 Checking Admin Role:", req.user);
-
     if (!req.user || req.user.role !== 'admin') {
         console.error("🚨 Access Denied. User is not an admin.");
         return res.status(403).json({ message: "Forbidden: Admins only" });
