@@ -38,7 +38,10 @@ router.post('/login', async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
         const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.cookie('token', token, { httpOnly: true }).json({ message: 'Login successful' });
+
+        // ✅ FIX: Send the token in response body, NOT as a cookie
+        res.json({ message: 'Login successful', token });
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -87,7 +90,7 @@ router.get("/verify", (req, res) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        res.json({ message: "Authenticated", user: decoded });
+        res.json({ message: "Authenticated", user: decoded, token }); // ✅ Always return token
     } catch (error) {
         res.status(403).json({ message: "Invalid Token" });
     }
