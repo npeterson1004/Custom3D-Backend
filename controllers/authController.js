@@ -43,23 +43,22 @@ exports.registerUser = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        if (!username || !email || !password) {
-            return res.status(400).json({ message: "All fields are required." });
-        }
-
+        // ✅ Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: "Email already exists." });
+            return res.status(400).json({ message: "⚠️ Email already registered." });
         }
 
-        const newUser = new User({ username, email, password });
+        // ✅ Hash password before saving
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({ username, email, password: hashedPassword });
         await newUser.save();
 
         res.status(201).json({ message: "✅ Registration successful! You can now log in." });
-
     } catch (error) {
-        console.error("❌ Registration error:", error);
-        res.status(500).json({ message: "Server error. Could not register user." });
+        console.error("❌ Error registering user:", error);
+        res.status(500).json({ message: "❌ Server error. Could not register user." });
     }
 };
 
