@@ -6,8 +6,7 @@ exports.addProduct = async (req, res) => {
         console.log("Received file:", req.file);
 
         const { name, price, description } = req.body;
-        const imageUrl = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
-
+        const image = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
 
         if (!name || !price || !description || !image) {
             return res.status(400).json({ message: "All fields are required." });
