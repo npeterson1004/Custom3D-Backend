@@ -8,7 +8,7 @@ exports.adminLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const admin = await Admin.findOne({ email }); // ✅ Find admin user in the database
+        const admin = await Admin.findOne({ email });
         if (!admin) {
             console.log("❌ Admin not found");
             return res.status(400).json({ message: "Admin not found" });
@@ -20,17 +20,23 @@ exports.adminLogin = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
+        // ✅ Ensure JWT contains `role: "admin"`
         const token = jwt.sign(
-            { id: admin._id, role: 'admin' },
-            process.env.JWT_SECRET, { expiresIn: '1h' }
+            { id: admin._id, role: 'admin', email: admin.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
         );
 
+        console.log("✅ Admin Token Generated:", token); // Debugging
+
         res.json({ token, message: "✅ Login successful!" });
+
     } catch (error) {
         console.error("❌ Admin login error:", error);
         res.status(500).json({ message: "Server error" });
     }
 };
+
 
 // Register New User
 exports.registerUser = async (req, res) => {
