@@ -15,38 +15,11 @@ module.exports = router;
 
 
 
-// Register
-router.post('/register', async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
-        const user = new User({ username, email, password });
-        await user.save();
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+// ✅ Register User (Connected to Controller)
+router.post("/register", registerUser);
 
-// Login
-router.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'Invalid credentials' });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
-
-        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-        // ✅ FIX: Send the token in response body, NOT as a cookie
-        res.json({ message: 'Login successful', token });
-
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
+// ✅ Login User (Connected to Controller)
+router.post("/login", loginUser);
 
 router.post('/admin/login', async (req, res) => {
     try {
