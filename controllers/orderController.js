@@ -4,7 +4,9 @@ const Order = require("../models/Order");
 // Handle order creation
 exports.createOrder = async (req, res) => {
     try {
-        const { userEmail, items, totalAmount, orderDate } = req.body;
+        const { userEmail, items, totalAmount } = req.body;
+        const orderDate = new Date(); // Auto-generate order date
+
 
         // Validate required fields
         if (!userEmail || !items || items.length === 0) {
