@@ -43,10 +43,14 @@ exports.adminLogin = async (req, res) => {
 // ✅ Register a new user
 exports.registerUser = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, confirmPassword } = req.body;
 
-        // ✅ Debugging - Log incoming request
         console.log("📥 Registering User:", { username, email });
+
+        // ✅ Check if passwords match
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: "❌ Passwords do not match." });
+        }
 
         // ✅ Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -69,6 +73,7 @@ exports.registerUser = async (req, res) => {
         res.status(500).json({ message: "❌ Server error. Could not register user." });
     }
 };
+
 
 
 
