@@ -71,7 +71,9 @@ exports.registerUser = async (req, res) => {
 };
 
 
-// User Login Function
+
+
+// ✅ User Login Function
 exports.loginUser = async (req, res) => {
     try {
         console.log("🔍 Incoming Request Body:", req.body);
@@ -81,23 +83,34 @@ exports.loginUser = async (req, res) => {
             return res.status(400).json({ message: "❌ All fields are required." });
         }
 
-        const user = await User.findOne({ email });
+        // ✅ Convert email to lowercase to prevent case-sensitivity issues
+        const normalizedEmail = email.toLowerCase();
+        const user = await User.findOne({ email: normalizedEmail });
+
         if (!user) {
+            console.log("❌ User not found:", normalizedEmail);
             return res.status(400).json({ message: "❌ Invalid email or password." });
         }
 
+        // ✅ Debugging: Log stored hashed password vs entered password
+        console.log("🔍 Stored Hashed Password:", user.password);
+        console.log("🔍 Entered Password:", password);
+
+        // ✅ Compare passwords correctly
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
+            console.log("❌ Password mismatch");
             return res.status(400).json({ message: "❌ Invalid email or password." });
         }
 
+        // ✅ Generate JWT Token
         const token = jwt.sign(
             { userId: user._id, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
 
-        console.log("✅ Token Generated:", token); // ✅ Debugging
+        console.log("✅ Token Generated:", token);
 
         res.status(200).json({ 
             message: "✅ Login successful!", 
@@ -110,6 +123,7 @@ exports.loginUser = async (req, res) => {
         res.status(500).json({ message: "❌ Server error. Could not log in." });
     }
 };
+
 
 exports.verifyToken = async (req, res) => {
     try {

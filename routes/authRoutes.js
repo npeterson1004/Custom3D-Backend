@@ -8,11 +8,6 @@ const { registerUser, loginUser, verifyToken} = require("../controllers/authCont
 const router = express.Router();
 
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-
-module.exports = router;
-
 
 
 // ✅ Register User (Connected to Controller)
@@ -68,6 +63,7 @@ router.get("/verify", (req, res) => {
         res.status(403).json({ message: "Invalid Token" });
     }
 });
+
 
 
 
