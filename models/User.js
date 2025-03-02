@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true, trim: true },
+    email: { type: String, required: true, unique: true, trim: true, lowercase: true }, // ✅ Store emails in lowercase
     password: { type: String, required: true },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' }
+    role: { type: String, enum: ["user", "admin"], default: "user" },
+    createdAt: { type: Date, default: Date.now }
 });
-
 
 
 // ✅ Ensure password is hashed before saving (ONLY IF NOT ALREADY HASHED)
