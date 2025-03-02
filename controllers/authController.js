@@ -53,16 +53,14 @@ exports.registerUser = async (req, res) => {
         }
 
         // ✅ Check if user already exists
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email: email.toLowerCase() });
         if (existingUser) {
             console.log("⚠️ User already exists:", email);
             return res.status(400).json({ message: "⚠️ Email already registered." });
         }
 
-        // ✅ Hash password before saving
-        const hashedPassword = await bcrypt.hash(password, 12);
-
-        const newUser = new User({ username, email, password: hashedPassword });
+        // ✅ Create new user instance (let `User.js` handle password hashing)
+        const newUser = new User({ username, email: email.toLowerCase(), password });
         await newUser.save();
 
         console.log("✅ User registered successfully:", newUser);
@@ -73,6 +71,8 @@ exports.registerUser = async (req, res) => {
         res.status(500).json({ message: "❌ Server error. Could not register user." });
     }
 };
+
+
 
 
 
@@ -128,6 +128,8 @@ exports.loginUser = async (req, res) => {
         res.status(500).json({ message: "❌ Server error. Could not log in." });
     }
 };
+
+
 
 
 exports.verifyToken = async (req, res) => {

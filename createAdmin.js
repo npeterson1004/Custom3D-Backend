@@ -10,7 +10,7 @@ mongoose.connect("mongodb://localhost:27017/custom3d", { useNewUrlParser: true, 
         mongoose.connection.close();
     })
     .catch(err => console.log(err));
-*/
+
 
     bcrypt.hash("adminpassword", 10, (err, hash) => {
         console.log("New Hashed Password:", hash);
@@ -23,3 +23,18 @@ async function generateHashedPassword(password) {
     }
     
     generateHashedPassword("bogey");
+*/
+
+
+
+
+const enteredPassword = "bogey"; // The password you entered
+const storedHash = "$2a$10$0opWpqnI1tifUIr6CkvSOuUcQC61JsRw7COq1xLIee43k.m67aqEu"; // Hashed password from MongoDB
+
+bcrypt.compare(enteredPassword, storedHash, (err, result) => {
+    if (err) {
+        console.error("Error comparing passwords:", err);
+    } else {
+        console.log("Password Match:", result); // Should return `true`
+    }
+});
