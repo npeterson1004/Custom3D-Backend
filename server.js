@@ -20,16 +20,20 @@ const app = express();
 // CORS Configuration
 app.use(cors({
     origin: [
-        'http://localhost:5500',
-        'http://localhost:8000',
-        'https://delicate-yeot-77f124.netlify.app',
-        'https://custom3d-backend.onrender.com'
+        'http://localhost:5500', // ✅ Local frontend (development)
+        'http://localhost:8000', // ✅ Local API testing (Postman, browser)
+        'https://delicate-yeot-77f124.netlify.app' // ✅ Live frontend (Netlify)
     ],
-    credentials: true,
+    credentials: true, 
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    exposedHeaders: ['Authorization'] // ✅ Expose the Authorization header
+    exposedHeaders: ['Authorization']
 }));
+
+// ✅ Handle CORS Preflight Requests Properly
+app.options('*', cors()); // ✅ Allow preflight requests for all routes
+
+
 
 // Middleware
 app.use(express.json());
