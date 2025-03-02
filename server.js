@@ -22,7 +22,7 @@ app.use(cors({
     origin: [
         'http://localhost:5500', // ✅ Local frontend (development)
         'http://localhost:8000', // ✅ Local API testing (Postman, browser)
-        'https://delicate-yeot-77f124.netlify.app' // ✅ Live frontend (Netlify)
+        'https://natescustom3d.netlify.app' // ✅ Live frontend (Netlify)
     ],
     credentials: true, 
     allowedHeaders: ['Content-Type', 'Authorization'],
