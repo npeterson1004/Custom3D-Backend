@@ -20,7 +20,6 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: "custom3d-contact-uploads",
-        format: async (req, file) => file.mimetype.split("/")[1],
         public_id: (req, file) => `${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`
     }
 });
@@ -36,6 +35,20 @@ const upload = multer({
         cb(null, true);
     }
 });
+
+
+const fileFilter = (req, file, cb) => {
+    const allowedExtensions = ["stl", "obj", "step", "3mf"];
+    const extension = file.originalname.split(".").pop().toLowerCase();
+
+    if (!allowedExtensions.includes(extension)) {
+        console.error(`⚠️ Invalid file extension: ${extension}`);
+        return cb(new Error("⚠️ Invalid file type. Allowed: STL, OBJ, STEP, 3MF"), false);
+    }
+
+    cb(null, true);
+};
+
 
 // ✅ Submit contact form with optional file
 router.post("/", upload.single("file"), async (req, res, next) => {
