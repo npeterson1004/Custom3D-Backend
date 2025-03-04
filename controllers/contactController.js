@@ -9,20 +9,30 @@ const path = require("path");
 exports.submitContact = async (req, res) => {
     try {
         console.log("📩 Received contact request:", req.body);
-        console.log("📂 Uploaded File:", req.file ? req.file.path || req.file.secure_url : "No file uploaded.");
+        console.log("📂 Uploaded File:", req.file ? req.file.secure_url : "No file uploaded.");
 
         const { name, email, number, description } = req.body;
-        let fileUrl = req.file ? req.file.path || req.file.secure_url : ""; // ✅ Use Cloudinary URL
+        
+        // ✅ Use Cloudinary's `secure_url` for correct file storage
+        let fileUrl = req.file ? req.file.secure_url : ""; 
 
-        const newContact = new Contact({ name, email, number, description, fileUrl });
+        const newContact = new Contact({ 
+            name, 
+            email, 
+            number, 
+            description, 
+            fileUrl // ✅ Store Cloudinary URL in MongoDB
+        });
+
         await newContact.save();
 
-        res.status(201).json({ message: "✅ Contact request submitted successfully with file!" });
+        res.status(201).json({ message: "✅ Contact request submitted successfully!", fileUrl });
     } catch (error) {
         console.error("❌ Error saving contact request:", error);
         res.status(500).json({ message: "❌ Failed to submit contact request." });
     }
 };
+
 
 
 // ✅ Retrieve all contact requests (Admin View)
