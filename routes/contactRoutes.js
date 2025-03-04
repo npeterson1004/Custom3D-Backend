@@ -19,19 +19,32 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: "custom3d-contact-uploads", // Different folder for contacts
-        format: async (req, file) => file.mimetype.split("/")[1], // Keep original format
+        folder: "custom3d-contact-uploads",
+        format: async (req, file) => file.mimetype.split("/")[1],
         public_id: (req, file) => `${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ 
+    storage, 
+    limits: { fileSize: 10 * 1024 * 1024 }, // ✅ Limit file size to 10MB
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ["image/jpeg", "image/png", "application/pdf", "model/stl", "model/obj"];
+        if (!allowedTypes.includes(file.mimetype)) {
+            return cb(new Error("⚠️ Invalid file type. Allowed: JPG, PNG, PDF, STL, OBJ"), false);
+        }
+        cb(null, true);
+    }
+});
 
 // ✅ Submit contact form with optional file
 router.post("/", upload.single("file"), async (req, res, next) => {
     try {
-        console.log("📩 Contact request received:", req.body);
-        console.log("📂 Uploaded File:", req.file ? req.file.path : "No file uploaded.");
+        if (!req.file) {
+            console.warn("⚠️ No file uploaded. Proceeding without file.");
+        } else {
+            console.log("📂 Uploaded File:", req.file.path || req.file.secure_url);
+        }
 
         await submitContact(req, res);
     } catch (error) {
@@ -40,7 +53,7 @@ router.post("/", upload.single("file"), async (req, res, next) => {
     }
 });
 
-// ✅ Get all contact requests (Admin View) - Protected Route
+// ✅ Get all contact requests (Admin View)
 router.get("/", authMiddleware, async (req, res) => {
     try {
         await getContacts(req, res);

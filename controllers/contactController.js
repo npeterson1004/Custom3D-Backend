@@ -9,10 +9,10 @@ const path = require("path");
 exports.submitContact = async (req, res) => {
     try {
         console.log("📩 Received contact request:", req.body);
-        console.log("📂 Uploaded File:", req.file ? req.file.path : "No file uploaded.");
+        console.log("📂 Uploaded File:", req.file ? req.file.path || req.file.secure_url : "No file uploaded.");
 
         const { name, email, number, description } = req.body;
-        let fileUrl = req.file ? req.file.path : ""; // ✅ Save Cloudinary URL
+        let fileUrl = req.file ? req.file.path || req.file.secure_url : ""; // ✅ Use Cloudinary URL
 
         const newContact = new Contact({ name, email, number, description, fileUrl });
         await newContact.save();
