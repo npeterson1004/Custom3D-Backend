@@ -15,22 +15,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: "custom3d-contact-uploads",
-        resource_type: "raw", // ✅ Ensures Cloudinary stores STL, OBJ, etc.
-        public_id: (req, file) => `${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`
-    }
-});
-
-
-const upload = multer({ 
-    storage, 
-    limits: { fileSize: 10 * 1024 * 1024 }, // ✅ Limit file size to 10MB
-    fileFilter // ✅ Ensures file extensions are checked
-});
-
+// ✅ Move fileFilter function ABOVE multer configuration
 const fileFilter = (req, file, cb) => {
     const allowedExtensions = ["stl", "obj", "step", "3mf"];
     const fileExtension = file.originalname.split(".").pop().toLowerCase();
@@ -43,6 +28,22 @@ const fileFilter = (req, file, cb) => {
     cb(null, true);
 };
 
+// ✅ Configure Cloudinary Storage for 3D Print Files
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: "custom3d-contact-uploads",
+        resource_type: "raw", // ✅ Ensures Cloudinary stores STL, OBJ, etc.
+        public_id: (req, file) => `${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`
+    }
+});
+
+// ✅ Initialize multer AFTER fileFilter is defined
+const upload = multer({ 
+    storage, 
+    limits: { fileSize: 10 * 1024 * 1024 }, // ✅ Limit file size to 10MB
+    fileFilter // ✅ Correctly using fileFilter now
+});
 
 // ✅ Submit contact form with optional file
 router.post("/", upload.single("file"), async (req, res, next) => {
@@ -71,3 +72,4 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
+
