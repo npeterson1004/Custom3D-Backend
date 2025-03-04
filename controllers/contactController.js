@@ -9,12 +9,14 @@ const path = require("path");
 exports.submitContact = async (req, res) => {
     try {
         console.log("📩 Received contact request:", req.body);
-        console.log("📂 Uploaded File:", req.file ? req.file.secure_url : "No file uploaded.");
+        console.log("📂 Uploaded File:", req.file ? req.file : "No file uploaded.");
 
         const { name, email, number, description } = req.body;
         
         // ✅ Ensure Cloudinary URL is stored correctly
-        let fileUrl = req.file ? req.file.secure_url : ""; 
+        let fileUrl = req.file && req.file.path ? req.file.path : req.file.secure_url || ""; 
+
+        console.log("🔗 Final file URL stored:", fileUrl); // ✅ Debugging log
 
         const newContact = new Contact({ 
             name, 
@@ -35,6 +37,7 @@ exports.submitContact = async (req, res) => {
         res.status(500).json({ message: "❌ Failed to submit contact request." });
     }
 };
+
 
 
 

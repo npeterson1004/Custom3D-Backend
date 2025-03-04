@@ -48,10 +48,13 @@ const upload = multer({
 // ✅ Submit contact form with optional file
 router.post("/", upload.single("file"), async (req, res, next) => {
     try {
+        console.log("📩 Contact request received:", req.body);
+        console.log("📂 Uploaded File Data:", req.file);
+
         if (!req.file) {
-            console.warn("⚠️ No file uploaded. Proceeding without file.");
+            console.warn("⚠️ No file uploaded.");
         } else {
-            console.log("📂 Uploaded File:", req.file.path || req.file.secure_url);
+            console.log("✅ File uploaded to Cloudinary:", req.file.path || req.file.secure_url);
         }
 
         await submitContact(req, res);
@@ -60,6 +63,7 @@ router.post("/", upload.single("file"), async (req, res, next) => {
         res.status(500).json({ message: "❌ Server error. Could not process request." });
     }
 });
+
 
 // ✅ Get all contact requests (Admin View)
 router.get("/", authMiddleware, async (req, res) => {
