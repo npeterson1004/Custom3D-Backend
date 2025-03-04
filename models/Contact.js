@@ -6,6 +6,7 @@ const ContactSchema = new mongoose.Schema({
     email: { type: String, required: true },
     number: { type: String, required: true },
     description: { type: String, required: true },
+    fileUrl: { type: String, default: "" }, // ✅ Store Cloudinary file URL
     createdAt: { type: Date, default: Date.now }
 });
 
