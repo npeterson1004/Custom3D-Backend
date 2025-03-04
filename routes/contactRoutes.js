@@ -26,19 +26,26 @@ const storage = multer.diskStorage({
 
 // ✅ Validate File Type
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
-    if (allowedTypes.includes(file.mimetype)) {
+    const allowedTypes = [
+        "image/jpeg", "image/png", "application/pdf", // ✅ Existing formats
+        "model/stl", "model/obj", "application/octet-stream", // ✅ 3D print formats
+        "application/x-step", "application/sla" // ✅ STEP & SLA files
+    ];
+
+    if (allowedTypes.includes(file.mimetype) || file.originalname.match(/\.(stl|obj|step|step|3mf|sla|igs|iges)$/i)) {
         cb(null, true);
     } else {
-        cb(new Error("⚠️ Invalid file type. Allowed formats: JPG, PNG, PDF."), false);
+        cb(new Error("⚠️ Invalid file type. Allowed formats: JPG, PNG, PDF, STL, OBJ, STEP, 3MF, SLA, IGES, IGS."), false);
     }
 };
+
 
 const upload = multer({
     storage,
     fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // ✅ Limit file size to 5MB
+    limits: { fileSize: 50 * 1024 * 1024 } // ✅ Increase file size limit to 50MB
 });
+
 
 // ✅ Submit contact form with optional file
 router.post("/", upload.single("file"), async (req, res, next) => {

@@ -5,21 +5,23 @@ const fs = require("fs");
 const path = require("path");
 
 // ✅ Handle contact form submissions
-
 exports.submitContact = async (req, res) => {
     try {
+        console.log("📩 Contact request received:", req.body);
+        console.log("📂 Uploaded File:", req.file || "No file uploaded.");
+
         const { name, email, number, description } = req.body;
         let fileUrl = "";
 
-        // ✅ Ensure `req.file` exists before accessing it
         if (req.file) {
             fileUrl = `/uploads/${req.file.filename}`;
+            console.log(`✅ File saved at: ${fileUrl}`);
         }
 
         const newContact = new Contact({ name, email, number, description, fileUrl });
         await newContact.save();
 
-        res.status(201).json({ message: "✅ Contact request submitted successfully!" });
+        res.status(201).json({ message: "✅ Contact request submitted successfully with file!" });
     } catch (error) {
         console.error("❌ Error saving contact request:", error);
         res.status(500).json({ message: "❌ Failed to submit contact request." });
