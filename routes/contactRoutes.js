@@ -8,7 +8,7 @@ const { authMiddleware } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// ✅ Ensure "uploads" directory exists
+// ✅ Ensure "uploads" directory exists (Render sometimes deletes empty folders)
 const uploadDir = "uploads/";
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
@@ -17,17 +17,16 @@ if (!fs.existsSync(uploadDir)) {
 // ✅ Configure Multer for File Uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, uploadDir); // Save files in the "uploads" directory
+        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "_")); // Replace spaces with underscores
+        cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
     }
 });
 
 // ✅ Validate File Type
 const fileFilter = (req, file, cb) => {
     const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
-    
     if (allowedTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
@@ -44,6 +43,10 @@ const upload = multer({
 // ✅ Submit contact form with optional file
 router.post("/", upload.single("file"), async (req, res, next) => {
     try {
+        console.log("📩 Contact request received.");
+        console.log("✅ Request Body:", req.body);
+        console.log("📂 Uploaded File:", req.file || "No file uploaded.");
+
         await submitContact(req, res);
     } catch (error) {
         console.error("❌ Error processing contact form:", error);

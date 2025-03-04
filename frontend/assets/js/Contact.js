@@ -1,6 +1,6 @@
 //contact.js
 
-import { API_BASE_URL } from "./config.js";
+import { API_BASE_URL } from "./config.js"; // ✅ Ensure correct import
 
 document.addEventListener("DOMContentLoaded", () => {
     const contactForm = document.getElementById("contactForm");
@@ -22,17 +22,23 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
+                console.log("📩 Sending request to:", `${API_BASE_URL}/api/contact`);
+
                 const response = await fetch(`${API_BASE_URL}/api/contact`, {
                     method: "POST",
                     body: formData
                 });
 
+                if (!response.ok) {
+                    throw new Error(`❌ Server Error: ${response.status} ${response.statusText}`);
+                }
+
                 const data = await response.json();
+                console.log("✅ Server Response JSON:", data);
+
                 document.getElementById("message").innerHTML = `<div class="alert alert-success">${data.message}</div>`;
 
-                if (response.ok) {
-                    this.reset();
-                }
+                this.reset();
             } catch (error) {
                 console.error("❌ Error submitting contact request:", error);
                 document.getElementById("message").innerHTML = `<div class="alert alert-danger">⚠️ Failed to submit request.</div>`;
