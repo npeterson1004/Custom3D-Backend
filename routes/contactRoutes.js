@@ -1,58 +1,37 @@
 //contactRoutes.js
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 const { submitContact, getContacts } = require("../controllers/contactController");
 const { authMiddleware } = require("../middleware/authMiddleware");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("cloudinary").v2;
 
 const router = express.Router();
 
-// ✅ Ensure "uploads" directory exists (Render sometimes deletes empty folders)
-const uploadDir = "uploads/";
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
+// ✅ Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-// ✅ Configure Multer for File Uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
+// ✅ Configure Multer Storage for Cloudinary
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: "custom3d-contact-uploads", // Different folder for contacts
+        format: async (req, file) => file.mimetype.split("/")[1], // Keep original format
+        public_id: (req, file) => `${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`
     }
 });
 
-// ✅ Validate File Type
-const fileFilter = (req, file, cb) => {
-    const allowedTypes = [
-        "image/jpeg", "image/png", "application/pdf", // ✅ Existing formats
-        "model/stl", "model/obj", "application/octet-stream", // ✅ 3D print formats
-        "application/x-step", "application/sla" // ✅ STEP & SLA files
-    ];
-
-    if (allowedTypes.includes(file.mimetype) || file.originalname.match(/\.(stl|obj|step|step|3mf|sla|igs|iges)$/i)) {
-        cb(null, true);
-    } else {
-        cb(new Error("⚠️ Invalid file type. Allowed formats: JPG, PNG, PDF, STL, OBJ, STEP, 3MF, SLA, IGES, IGS."), false);
-    }
-};
-
-
-const upload = multer({
-    storage,
-    fileFilter,
-    limits: { fileSize: 50 * 1024 * 1024 } // ✅ Increase file size limit to 50MB
-});
-
+const upload = multer({ storage: storage });
 
 // ✅ Submit contact form with optional file
 router.post("/", upload.single("file"), async (req, res, next) => {
     try {
-        console.log("📩 Contact request received.");
-        console.log("✅ Request Body:", req.body);
-        console.log("📂 Uploaded File:", req.file || "No file uploaded.");
+        console.log("📩 Contact request received:", req.body);
+        console.log("📂 Uploaded File:", req.file ? req.file.path : "No file uploaded.");
 
         await submitContact(req, res);
     } catch (error) {
