@@ -1,8 +1,3 @@
-/*==================================
-* Author        : "ThemeSine"
-* Template Name : CarVilla  HTML Template
-* Version       : 1.0
-==================================== */
 
 /*==================================
 font-family: 'Poppins', sans-serif;
@@ -10,118 +5,31 @@ font-family: 'Rufina', serif;
 ==================================== */
 
 
-/*=========== TABLE OF CONTENTS ===========
-1.  General css (Reset code)
-2.  Top-area
-3.  Welcome-hero
-4.  Model-search
-5.  Service
-6.  New-cars
-7.  Featured-cars
-8.  Client-say
-9.  Brand
-10. Blog
-11. Contact
-==========================================*/
+/*====================================
+        TABLE OF CONTENTS
+====================================*/
+/*  
+1. General Styles (Reset, Typography, Layout)
+2. Top-area (Navigation, Sticky Navbar)
+3. Welcome-hero (Hero Section)
+4. Model-search (Search Functionality)
+5. Item Card Styles
+   - Enlarged Image Styling (Fullscreen View)
+   - Buttons (View Image, Add to Cart)
+   - Warehouse & Featured Items Grid
+   - Mobile & Desktop Responsive Adjustments
+   - Text Styling & Alignment
+   - Price & Cart Styling
+6. Cart & Order Styles
+7. Footer & Contact Section
+8. Mobile Responsiveness (All Sections)
+9. Scroll to Top Button
+10. Image Upload Styles
+====================================*/
+
 
 /*-------------------------------------
-		1.Warehouse stlyes
---------------------------------------*/
-
-.order-price {
-	margin: 0;
-	color:#fffdfd;
-    font-size: 20px;
-    font-weight: 500;
-    text-transform: capitalize;
-}
-
-/* ✅ Warehouse Grid Layout */
-.warehouse-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* ✅ Center align the items */
-    gap: 25px; /* ✅ Space between items */
-    padding: 20px 0;
-}
-
-/* ✅ Force Three Items Per Row */
-.warehouse-item {
-    width: 30%; /* ✅ Ensures 3 items per row */
-    border: 4px solid #003366; /* ✅ Dark Blue Border */
-    border-radius: 10px;
-    padding: 15px;
-    background-color: #0a1f44; /* ✅ Darker background for contrast */
-    color: #ffffff;
-    transition: transform 0.2s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-/* ✅ Make Items Stretch Evenly */
-.warehouse-item:hover {
-    transform: scale(1.05);
-}
-
-/* ✅ Ensure Images Scale Properly */
-.warehouse-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-/* ✅ Ensure Buttons are Styled */
-.add-to-cart-btn {
-    background-color: #0044cc;
-    color: white;
-    font-weight: bold;
-    border-radius: 5px;
-    padding: 8px 15px;
-    transition: background 0.3s;
-}
-
-.add-to-cart-btn:hover {
-    background-color: #002288;
-}
-
-/* ✅ Mobile Responsiveness */
-@media (max-width: 1024px) {
-    .warehouse-item {
-        width: 45%; /* ✅ Two per row on medium screens */
-    }
-}
-
-@media (max-width: 768px) {
-    .warehouse-item {
-        width: 100%; /* ✅ One per row on small screens */
-    }
-}
-
-
-
-
-
-.order-quantity {
-	margin: 0;
-	color:#fffdfd;
-    font-size: 20px;
-    font-weight: 500;
-    text-transform: capitalize;
-}
-
-.cart-quantity-input {
-    color: black !important; /* ✅ Black text */
-    background-color: #5f9fdb !important; /* ✅ Dark gray background */
-    text-align: center;
-    width: 60px;
-    border: 1px solid #555;
-    font-weight: bold;
-}
-
-/*-------------------------------------
-		1.General css (Reset code)
+    1. General Styles (Reset, Typography, Layout)
 --------------------------------------*/
 *{
     padding: 0;
@@ -149,8 +57,14 @@ body{
     /* Darker blue background with a fading effect */
     background-color: rgba(20, 50, 120, 0.9); /* Darker base blue */
     background-image: linear-gradient(to bottom, rgba(10, 30, 100, 0.9), rgba(0, 123, 255, 0.3), rgba(0, 123, 255, 0.1)); /* Dark to light gradient */
+    background-size: cover; /* ✅ Ensure it covers entire screen */
+    line-height: 1.6;
 }
-
+/* ✅ Ensure Full-Width on Mobile */
+.container {
+    max-width: 100%;
+    padding: 0 15px;
+}
 
 /* Ensure the body and html take up full height */
 html, body {
@@ -166,6 +80,7 @@ html, body {
     flex: 1;
     width: 100%;
     max-width: 1920px; /* Prevents stretching beyond this width */
+    min-height: 100vh; /* ✅ Ensures full-page coverage */
     margin: 0 auto;
     padding: 0;
     overflow-x: hidden; /* Prevents horizontal scrolling */
@@ -173,19 +88,6 @@ html, body {
     flex-direction: column;
 }
 
-/* Footer should stay at bottom */
-footer#contact {
-    background: rgba(0, 123, 255, 0.3);
-    color: #ffffff;
-    padding: 20px 0;
-    text-align: center;
-    width: 100%;
-    position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin-top: auto; /* Push footer down */
-}
 
 
 
@@ -228,6 +130,7 @@ h8 {
     font-weight: 500;
     text-transform: capitalize;
 }
+
 
 p {
 	margin: 0;
@@ -286,9 +189,7 @@ button {background: transparent;border: 0;font-size: 16px;text-transform: capita
 .section-header p{color: #4e4ffa;text-transform: capitalize;margin-bottom:10px;}
 .section-header h2 span,.section-header p span{text-transform: lowercase;}
 
-/* section-header */
 
-/*=============Style css=========*/
 
 
 /*-------------------------------------
@@ -373,41 +274,105 @@ nav.navbar.bootsnav .navbar-toggle i{color: #094886;}
 /*-------------------------------------
         3.  Welcome-hero
 --------------------------------------*/
+
+/*-------------------------------------
+        3.  Welcome-hero
+--------------------------------------*/
+
+/* ✅ Welcome Hero Section */
 .welcome-hero {
     position: relative;
-    background:url(../images/welcome-hero/welcome-banner.jpg)no-repeat;
-    background-position: center;
-    background-size: cover;
-    z-index: 1;
+    background: url(../images/welcome-hero/welcome-banner.jpg) no-repeat center center/cover;
+    min-height: 100vh; /* ✅ Full viewport height */
+    display: flex;
+    align-items: flex-start; /* ✅ Moves text higher */
+    justify-content: center;
+    text-align: center;
+    padding: 12vh 5vw 0; /* ✅ More space at the top, less at the bottom */
 }
+
+/* ✅ Overlay Effect */
 .welcome-hero:before {
-    position: absolute;
     content: "";
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(42,45,84,.60);
+    background: rgba(42, 45, 84, 0.6);
+    z-index: 1;
 }
-.header-area{position: absolute;top:0;left:0;width: 100%;z-index: 99;}
 
-/*.welcome-hero-txt*/
-.welcome-hero-txt{text-align: center;padding:290px 0 372px;}
+.header-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+}
+
+/* ✅ Hero Text Container */
+.welcome-hero-txt {
+    position: relative;
+    z-index: 2;
+    max-width: 85%;
+    text-align: center;
+    padding: 5vh 2vw;
+}
+
+/* ✅ Improve Heading Readability */
 .welcome-hero-txt h2 {
-    font-size: 42px;
-    color: #fff;
+    font-size: 48px;
     font-weight: 700;
     text-transform: uppercase;
-    margin-bottom: 45px;
-}
-.welcome-hero-txt p {
-    font-size: 18px;
-    text-transform: initial;
     color: #fff;
-    font-weight: 500;
-    max-width: 735px;
-    margin: 0 auto;
+    margin-bottom: 20px; /* ✅ Adds spacing below each heading */
+    line-height: 1.3; /* ✅ Improves readability */
+    display: block;
 }
+
+/* ✅ Add Space Between First & Second Heading */
+.welcome-hero-txt h2:first-child {
+    margin-bottom: 15px; /* ✅ Adds space between first & second heading */
+}
+
+/* ✅ Fix Stacking & Spacing Issues on Mobile */
+@media (max-width: 768px) {
+    .welcome-hero {
+        min-height: 80vh; /* ✅ Adjust height for mobile */
+        padding: 8vh 5vw 0; /* ✅ More top padding to move text higher */
+    }
+
+    .welcome-hero-txt {
+        max-width: 100%;
+        padding: 3vh 5vw;
+    }
+
+    .welcome-hero-txt h2 {
+        font-size: 32px;
+        line-height: 1.5;
+        margin-bottom: 20px; /* ✅ More space between headings */
+    }
+
+    .welcome-hero-txt h2:first-child {
+        margin-bottom: 12px; /* ✅ Adds space between first & second heading */
+    }
+
+    .welcome-hero-txt p {
+        font-size: 16px;
+        padding: 0 15px;
+        margin-bottom: 15px; /* ✅ Adds space between paragraphs */
+    }
+
+    .welcome-btn {
+        width: 180px;
+        height: 50px;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+}
+
+/* ✅ Improve Button Styling */
 .welcome-btn {
     display: inline-block;
     width: 230px;
@@ -415,17 +380,19 @@ nav.navbar.bootsnav .navbar-toggle i{color: #094886;}
     background: #4e4ffa;
     color: #fff;
     border-radius: 3px;
-    margin-top: 55px;
-    -webkit-transition: .3s linear; 
-    -moz-transition:.3s linear; 
-    -ms-transition:.3s linear; 
-    -o-transition:.3s linear;
-    transition: .3s linear;
+    margin-top: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background 0.3s;
 }
-.welcome-btn:hover{
+
+.welcome-btn:hover {
     background: #0102fa;
 }
-/*.welcome-hero-txt*/
+
+
+
+
 
 /*-------------------------------------
         4. Model-Search
@@ -491,236 +458,421 @@ nav.navbar.bootsnav .navbar-toggle i{color: #094886;}
 
 /*.single-model-search*/
 
-/*-------------------------------------
-        5. Service 
---------------------------------------*/
-.service { padding: 260px 0 87px;}
-
-.single-service-item{
-    text-align: center;
-    padding:55px 30px 60px;
-    border-radius: 3px;
-    margin-bottom: 30px;
-    border: 1px solid #dadfe9;
-    -webkit-transition: .3s linear; 
-    -moz-transition:.3s linear; 
-    -ms-transition:.3s linear; 
-    -o-transition:.3s linear;
-    transition: .3s linear;
-}
-
-.single-service-icon {
-    display: inline-block;
-    color: #f3f7fa;
-}
-.single-service-item h2 a {
-    font-size:20px;
-    margin: 35px 0 20px;
-}
-.single-service-item h2 a span {text-transform:  lowercase;}
-.single-service-item p {padding-bottom: 35px;text-transform: initial;position: relative;}
-.single-service-item p:before {
-    position: absolute;
-    content: "";
-    width: 20px;
-    height: 3px;
-    background: #3030ea;
-    bottom: 0;
-    left: 50%;
-    margin-left: -10px;
-}
-
-.single-service-icon [class^="flaticon-"]:before,.single-service-icon[class*=" flaticon-"]:before,.single-service-icon [class^="flaticon-"]:after,.single-service-icon [class*=" flaticon-"]:after {font-size:60px;}
-.single-service-item:hover .single-service-icon [class^="flaticon-"]:before,.single-service-item:hover .single-service-icon [class*=" flaticon-"]:before,.single-service-item:hover .single-service-icon [class^="flaticon-"]:after,.single-service-item:hover .single-service-icon [class*=" flaticon-"]:after {color:#fff;}
-
-
-.single-service-item:hover h2 a,.single-service-item:hover p{color: #fff;}
-.single-service-item:hover  p:before {background: #fff;}
-.single-service-item:hover{box-shadow: 0 12px 30px 0px rgba(0,1,193,.2);background: #4e4ffa;border: 1px solid #4e4ffa;}
-
+/*====================================
+        5. Item Card Styles
+====================================*/
 
 /*-------------------------------------
-        6.  prints
+        Enlarged Image Styling
 --------------------------------------*/
-.new-cars{
-    background: #e8eaec;
-    padding:112px 0 120px;
-}
-.new-cars-content{padding-top:96px;}
-/*.new-cars-txt*/
-.new-cars-txt {margin-left: 29px;margin-bottom: 30px;}
-.new-cars-txt h2 a {
-    font-size:  30px;
-    font-weight:  500;
-    margin-bottom: 26px;
-}
-.new-cars-txt h2 a span {text-transform:  uppercase;}
-.new-cars-para2 {margin-top: 30px;}
-.welcome-btn.new-cars-btn {
-    width: 176px;
-    margin-top: 32px;
-}
-/*.new-cars-txt*/
 
-/*.owl-dots */
-.new-cars .owl-theme .owl-dots .owl-dot span {
-    width: 8px;
-    height: 8px;
-    margin: 0px 4px;
-    background: transparent;
-    border: 1px solid #f4f6f8;
-    border-radius: 50%;
+/* ✅ General Page Reset */
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #0a1f44 0%, #1a3d73 30%, #2b5b99 60%, #4d7ebf 100%);
+    background-attachment: fixed;
+    background-size: cover;
+    position: relative; /* ✅ Prevents fullscreen overlay issues */
 }
-.new-cars .owl-theme .owl-dots .owl-dot.active span,.new-cars .owl-theme .owl-dots .owl-dot:hover span {background: #f3f4f5;}
-.new-cars .owl-theme .owl-nav.disabled+.owl-dots {margin-top: 62px;}
-/*.owl-dots */
 
-/*-------------------------------------
-        7. Featured-prints
---------------------------------------*/
-.featured-cars{
-    padding:112px 0 120px;
+/* ✅ Prevents background issues when opening images */
+body.no-scroll {
+    overflow: visible !important;
+    background: none !important;
 }
-.featured-cars-content{padding-top:96px;}
 
-/*.single-featured-cars*/
-.featured-img-box {
-    border: 1px solid #06286d;
+
+/* ✅ Ensure the image doesn't block interactions */
+#popupImage {
+    display: none;
+    pointer-events: auto; /* ✅ Allows interactions with other page elements */
 }
-.featured-cars-img {
+
+/* ✅ Styles for the fullscreen image overlay */
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9); /* ✅ Dark overlay */
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 30px;
-    height: 220px;
-    border-bottom: 1px solid #06286d;
+    z-index: 9999;
+    cursor: pointer;
 }
-.featured-model-info{padding:12px 7px;}
-.featured-model-info p {
-    font-size: 12px;
-    color: #0d0d0e;
+
+
+
+.fullscreen-img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain; /* ✅ Show entire image */
+    border-radius: 6px;
+    cursor: pointer;
+    position: absolute; /* ✅ Change to absolute so it's properly centered */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* ✅ Center the image */
+    z-index: 9999;
+}
+
+
+/*-------------------------------------
+    Buttons (View Image, Add to Cart)
+--------------------------------------*/
+
+/* ✅ "View Image" button styling */
+.view-image-btn {
+    background-color: #008CBA; /* ✅ Blue button */
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    margin-top: 10px;
+}
+
+/* ✅ "View Image" button hover effect */
+.view-image-btn:hover {
+    background-color: #005f75;
+}
+
+
+
+.add-to-cart-btn {
+    background-color: #0044cc;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #002288;
+}
+
+
+
+/*-------------------------------------
+   Warehouse & Featured Items Grid
+--------------------------------------*/
+
+
+
+/* ✅ General styles for all items */
+.warehouse-item, .featured-item {
+    flex: 1 1 calc(100% - 20px); /* ✅ Full width on mobile */
+    max-width: 100%;
+    margin-bottom: 20px; /* ✅ Balanced spacing */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* ✅ Prevents compression */
+    padding: 5px; /* ✅ Reduced padding to minimize space around content */
+    border: 3px solid #003366;
+    border-radius: 8px;
+    background-color: #0a1f44;
+    color: white;
+    transition: transform 0.2s ease-in-out;
+    min-height: 420px; /* ✅ Ensures enough space for buttons */
+}
+
+/* ✅ Hover effect for warehouse & featured items */
+.warehouse-item:hover, .featured-item:hover {
+    transform: scale(1.05); /* ✅ Makes items slightly larger on hover */
+}
+
+/* ✅ Ensures images fit inside cards properly */
+.warehouse-img, .featured-img {
+    width: 100%;
+    height: auto;
+    max-height: 300px; /* ✅ Prevents oversized images */
+    object-fit: cover; /* ✅ Ensures images are properly displayed */
+    border-radius: 6px;
+}
+
+
+
+/* ✅ Adjust grid layout */
+.warehouse-grid, .featured-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px; /* ✅ Reduces extra spacing */
+    padding: 10px;
+    width: 100%;
+    
+}
+
+/*-------------------------------------
+    Mobile & Desktop Responsive Adjustments
+--------------------------------------*/
+/* ✅ Mobile Adjustments */
+@media (max-width: 768px) {
+    .warehouse-item, .featured-item {
+        flex: 1 1 100%; /* ✅ One item per row on mobile */
+        max-width: 100%;
+        margin-bottom: 30px; /* ✅ Balanced spacing */
+        min-height: 420px;
+    }
+}
+
+/* ✅ Adjusts warehouse & featured item layout for tablets */
+@media (min-width: 768px) {
+    .warehouse-item, .featured-item {
+        flex: 1 1 calc(50% - 10px); /* ✅ Two items per row */
+        max-width: calc(50% - 10px);
+        margin-bottom: 50px;
+        min-height: 440px;
+    }
+}
+
+/* ✅ Adjusts warehouse & featured item layout for desktops */
+@media (min-width: 1024px) {
+    .warehouse-item, .featured-item {
+        flex: 1 1 calc(33.333% - 10px); /* ✅ Three items per row */
+        max-width: calc(33.333% - 10px);
+        margin-bottom: 50px;
+    }
+}
+
+
+
+/* ✅ Mobile Adjustments */
+@media (max-width: 768px) {
+    .warehouse-details h5, .featured-details h5 {
+        font-size: 33px; /* ✅ Increased for better visibility on small screens */
+        font-weight: bold; /* ✅ Makes it stand out */
+    }
+}
+
+/* ✅ Adjust for tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .warehouse-details h5, .featured-details h5 {
+        font-size: 25px; /* ✅ Slightly larger for tablets */
+    }
+}
+/* ✅ Mobile Adjustments */
+@media (max-width: 768px) {
+    .featured-grid .featured-details h5 {
+        font-size: 24px !important; /* ✅ Bigger for mobile readability */
+        font-weight: bold;
+    }
+}
+
+/* ✅ Adjust for tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .featured-grid .featured-details h5 {
+        font-size: 22px !important; /* ✅ Slightly larger for tablets */
+    }
+}
+
+
+/*-------------------------------------
+    Text Styling & Alignment
+--------------------------------------*/
+
+
+/* ✅ Fix buttons not staying at the bottom */
+.warehouse-details, .featured-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* ✅ Ensures buttons always stay at the bottom */
+    flex-grow: 1; /* ✅ Fills available space */
+    width: 100%;
+}
+/* ✅ Ensure Titles are Centered */
+.warehouse-details h5, .featured-details h5 {
+	color:#b3d5f7;
+    font-size: 25px;
+    font-weight: 500;
+    text-transform: capitalize;
+    margin-bottom: 6px;
+    width: 100%; /* ✅ Ensures full width for proper centering */
+    text-align: center;
+}
+
+
+.featured-grid .featured-details h5 {
+    font-size: 22px !important; /* ✅ Forces correct size */
+    font-weight: bold; /* ✅ Ensures visibility */
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+
+
+/* ✅ Ensure Paragraphs are Centered */
+.warehouse-details p, .featured-details p {
+    font-size: 16px;
+    margin-bottom: 6px;
+    width: 100%;
+    text-align: center;
+}
+
+
+
+
+/*-------------------------------------
+    Price & Cart Styling
+--------------------------------------*/
+
+
+.order-price {
+	margin: 0;
+	color:#fffdfd;
+    font-size: 20px;
+    font-weight: 500;
     text-transform: capitalize;
 }
-.featured-mi-span{display: inline-block;margin:0 10px;}
-.featured-hp-span{display: inline-block;margin-right: 10px;}
-.featured-cars-txt{margin:21px 0 47px;}
-.featured-cars-txt h2 a{font-size: 16px;margin-bottom: 15px;}
-.featured-cars-txt h2 a span{text-transform: uppercase;}
-.featured-cars-txt h3{margin-bottom: 10px;}
-.featured-cars-txt h3,.featured-cars-txt p{font-size: 13px;}
-/*.single-featured-cars*/
-#featured-prints .card-text.text-muted {
-    color: #ffffff !important; /* Changes price text to white */
-}
 
-
-/*-------------------------------------       
-        8. Clients-say 
---------------------------------------*/
-.clients-say{padding:115px 0 80px;background: #f8f9fb;}
-
-/*single-testimonial-box */
-.single-testimonial-box  {
-    padding: 50px 30px 57px;
+/* ✅ Styles the cart quantity input */
+.cart-quantity-input {
+    color: black !important;
+    background-color: #5f9fdb !important;
     text-align: center;
-    border: 1px solid #080808;
-    overflow-x: hidden;
-    -webkit-transition: .3s; 
-    -moz-transition:.3s; 
-    -ms-transition:.3s; 
-    -o-transition:.3s;
-    transition: .3s;
+    width: 60px;
+    border: 1px solid #555;
+    font-weight: bold;
 }
 
-/*testimonial-description*/
-.clients-say .testimonial-carousel .col-sm-3,
-.clients-say .testimonial-carousel .col-xs-12{
-    width:100%;
-    height:auto;
+.cart-item-img {
+    width: 50px;  /* Adjust width */
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
 }
-/* testimonial-info */
-.testimonial-img {
-    margin-right: 5px;
-    border-radius:50%;
-    -webkit-transition: .3s; 
-    -moz-transition:.3s; 
-    -ms-transition:.3s; 
-    -o-transition:.3s;
-    transition: .3s;
-}
-.testimonial-person h2 a,.testimonial-person h4 {
-    font-size: 16px;
-    color: #edf0f5;
-    font-weight: 600;
-}
-.testimonial-person h4{
-    margin-top: 10px;
-}/* testimonial-info */
-
-
-/* testimonial-comment */
-.testimonial-comment p {
-    font-size: 16px;
-    color: #eaedf1;
-    margin-top: 30px;
-    margin-bottom: 25px;
-}/* testimonial-comment */
-
-
-/*testimonial-description*/
-.single-testimonial-box:hover h2 a,.single-testimonial-box:hover h4, .single-testimonial-box:hover p{color: #fff;}
-.single-testimonial-box:hover{
-    background: #4e4ffa;
-    border: 1px solid #4e4ffa;
-    box-shadow: 0 12px 30px 0px rgba(0,1,193,.2);
-}
-
-/*owl carousel*/
-.clients-say .owl-carousel .owl-stage {
-    position: relative;
-    padding: 100px 0 40px;
-}
-.clients-say .owl-carousel .owl-item img {
-    display: block;
-    width: 70px;
-    height: 70px;
-    border-radius:50%;
-    margin:0 auto;
-}
-/*owl carousel*/
 
 /*-------------------------------------
-        9. Brand
---------------------------------------*/
-.brand{
-    padding: 120px 0;
-}
-.brand-area {
-    position:relative;
-}
-.brand-area .item {
-    padding: 0 40px 0;
-}
-
-.brand .brand-area .owl-carousel .owl-item img {
-    display: block;
-    width: 100%;
-    height:72px;
-    border-radius:0;
-}
-/*-------------------------------------
-        10.footer
+    Ensure Warehouse Section Layout is Clean
 --------------------------------------*/
 
-/* ✅ Ensure the body takes full height */
+/* ✅ Prevent warehouse items from extending too far */
+#warehouse {
+    background: transparent; /* ✅ No extra background */
+    padding-bottom: 100px; /* ✅ Add bottom spacing */
+}
+
+
+
+
+
+
+
 
 
 
 
 
 /*-------------------------------------
-        12. Contact
+    8. Cart & Order Styles
 --------------------------------------*/
+/* ✅ Fix cart count number */
+#cart-count {
+    color: #4e4ffa !important; /* ✅ White text */
+    font-weight: bold;
+    background-color: transparent !important; /* ✅ Keep transparent if inside the button */
+    padding: 3px 8px;
+    border-radius: 50%;
+    font-size: 14px;
+    display: inline-block;
+    min-width: 20px;
+    text-align: center;
+}
+
+.order-quantity {
+	margin: 0;
+	color:#fffdfd;
+    font-size: 20px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.cart-quantity-input {
+    color: black !important; /* ✅ Black text */
+    background-color: #5f9fdb !important; /* ✅ Dark gray background */
+    text-align: center;
+    width: 60px;
+    border: 1px solid #555;
+    font-weight: bold;
+}
+/*-------------------------------------
+    9. Footer & Contact Section
+--------------------------------------*/
+
+/* ✅ Reduce Footer Height */
+.footer {
+    background: #4d7ebf;
+    padding: 15px 0; /* ⬇️ Reduce vertical padding */
+    text-align: center;
+    color: white;
+    border-top: 3px solid #003366; /* ✅ Keep a slight top border */
+}
+
+/* ✅ Reduce Footer Top Section */
+.footer-top {
+    padding: 10px 0; /* ⬇️ Reduce vertical padding */
+}
+
+/* ✅ Make Contact Details More Compact */
+.footer-top h2 {
+    font-size: 18px; /* ⬇️ Slightly smaller heading */
+    margin-bottom: 8px; /* ⬇️ Less space below heading */
+}
+
+.footer-top p {
+    font-size: 14px; /* ✅ Keep readable but compact */
+    margin-bottom: 4px; /* ⬇️ Reduce spacing */
+}
+
+/* ✅ Footer Copyright (Even Smaller) */
+.footer-copyright {
+    padding: 10px 0; /* ⬇️ Reduce padding */
+    font-size: 12px; /* ✅ Smaller copyright text */
+}
+
+/* ✅ Footer Social Icons (Compact) */
+.footer-social {
+    text-align: center;
+    margin-top: 5px; /* ⬇️ Reduce spacing */
+}
+
+.footer-social a i {
+    font-size: 14px; /* ✅ Keep icons smaller */
+    margin-left: 8px; /* ⬇️ Reduce spacing */
+}
+
+/* ✅ Remove Extra Space at Bottom */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* ✅ Mobile Adjustments */
+@media (max-width: 768px) {
+    .footer {
+        padding: 10px 0; /* ⬇️ Make footer even smaller on mobile */
+    }
+
+    .footer-top h2 {
+        font-size: 16px; /* ⬇️ Reduce heading size */
+    }
+
+    .footer-top p {
+        font-size: 13px; /* ✅ Adjust text */
+    }
+}
+
+
 .contact {
     background: #2a2d54;
 }
@@ -840,6 +992,10 @@ nav.navbar.bootsnav .navbar-toggle i{color: #094886;}
 }
 .footer-social i:hover{opacity: .70;}
 /*.footer-copyright */
+
+
+
+
 /* Change text box background color in Contact Form */
 #contactForm .form-control {
     background-color: #c7c6c6 !important; /* Light gray */
@@ -851,9 +1007,127 @@ nav.navbar.bootsnav .navbar-toggle i{color: #094886;}
     color: #444 !important; /* Darker gray placeholder text */
     opacity: 1;
 }
-/*===============================
-    Scroll Top
-===============================*/
+
+
+/*-------------------------------------
+    10. Mobile Responsiveness (All Sections)
+--------------------------------------*/
+
+
+
+
+/* ✅ Mobile-Friendly Adjustments */
+@media (max-width: 1024px) {
+    .container {
+        max-width: 95%;
+        padding: 0 10px;
+    }
+
+    .navbar-nav {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .welcome-hero {
+        padding: 60px 15px;
+    }
+
+    .welcome-hero-txt h2 {
+        font-size: 26px;
+    }
+
+    .welcome-btn {
+        width: 180px;
+        height: 50px;
+        font-size: 14px;
+    }
+}
+
+/* ✅ Ensure Full Mobile Responsiveness */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .navbar-toggle {
+        margin-top: 5px;
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 0 5px;
+    }
+
+    .welcome-hero {
+        padding: 40px 10px;
+    }
+
+    .welcome-hero-txt h2 {
+        font-size: 22px;
+    }
+
+    .welcome-hero-txt p {
+        font-size: 14px;
+    }
+
+    .welcome-btn {
+        width: 160px;
+        height: 45px;
+        font-size: 13px;
+    }
+
+    /* ✅ Featured Prints Mobile Grid */
+    .featured-item {
+        width: 100%;
+        max-height: 300px;
+        font-size: 14px;
+    }
+
+    .featured-img {
+        height: 150px;
+    }
+
+    .featured-details h5 {
+        font-size: 14px;
+    }
+
+    .add-to-cart-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    /* ✅ Adjust Warehouse Grid */
+    .warehouse-item {
+        width: 100%;
+        max-height: 300px;
+    }
+
+    .warehouse-img {
+        height: 150px;
+    }
+
+    /* ✅ Footer Adjustments */
+    .footer {
+        padding: 10px 0;
+    }
+
+    .footer-top h2 {
+        font-size: 18px;
+    }
+
+    .footer-top p {
+        font-size: 14px;
+    }
+}
+
+/* ✅ Responsive Heading Fix */
+
+
+
+
+/*-------------------------------------
+    11. Scroll to Top Button
+--------------------------------------*/
 #scroll-Top  .return-to-top {
     position: fixed;
     right: 30px;
@@ -901,9 +1175,8 @@ nav.navbar.bootsnav .navbar-toggle i{color: #094886;}
 }
 
 /*-------------------------------------
-        upload images
+    12. Image Upload Styles
 --------------------------------------*/
-
 
 .uploaded-img-container {
     padding: 10px;
@@ -919,22 +1192,6 @@ nav.navbar.bootsnav .navbar-toggle i{color: #094886;}
 }
 
 
-/*cart*/
-
-
-
-/* ✅ Fix cart count number */
-#cart-count {
-    color: #4e4ffa !important; /* ✅ White text */
-    font-weight: bold;
-    background-color: transparent !important; /* ✅ Keep transparent if inside the button */
-    padding: 3px 8px;
-    border-radius: 50%;
-    font-size: 14px;
-    display: inline-block;
-    min-width: 20px;
-    text-align: center;
-}
 
 
 /*========================Thank you=================

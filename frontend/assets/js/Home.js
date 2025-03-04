@@ -1,8 +1,8 @@
 //Home.js
 
+import { API_BASE_URL } from "./config.js";
 
-
-import { API_BASE_URL } from "./config.js";  // ✅ Import API base URL
+document.addEventListener("DOMContentLoaded", fetchFeaturedProducts);
 
 async function fetchFeaturedProducts() {
     try {
@@ -23,20 +23,38 @@ async function fetchFeaturedProducts() {
         }
 
         products.forEach(product => {
-            const productCard = `
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img src="${product.image.startsWith('http') ? product.image : API_BASE_URL + product.image}" class="card-img-top" alt="${product.name}" style="max-width: 100%; height: auto;">
-                        <div class="card-body">
-                            <h7 class="card-title">${product.name}</h7>
-                            <p class="card-text">${product.description}</p>
-                            <p class="card-text">$${product.price}</p>
-                            <button class="btn btn-primary" onclick="addToCart('${product.name}', ${product.price}, '${API_BASE_URL}${product.image}')">Add to Cart</button>
-                        </div>
-                    </div>
+            const productCard = document.createElement("div");
+            productCard.classList.add("featured-item");
+
+            productCard.innerHTML = `
+                <img src="${product.image.startsWith('http') ? product.image : API_BASE_URL + product.image}" 
+                     class="featured-img" 
+                     alt="${product.name}">
+                <div class="featured-details">
+                    <h5>${product.name}</h5>
+                    <p>${product.description}</p>
+                    <p class="order-price">$${product.price}</p>
+                    <button class="btn btn-primary add-to-cart-btn" data-product-id="${product._id}">
+                        Add to Cart
+                    </button>
+                    <button class="view-image-btn">
+                        View Image
+                    </button>
                 </div>
             `;
-            imageContainer.innerHTML += productCard;
+
+            // Attach event listener to "View Image" button
+            productCard.querySelector(".view-image-btn").addEventListener("click", () => {
+                enlargeImage(product.image.startsWith('http') ? product.image : API_BASE_URL + product.image);
+            });
+
+            // ✅ FIXED: Correctly pass parameters to `addToCart`
+            productCard.querySelector(".add-to-cart-btn").addEventListener("click", () => {
+                addToCart(product.name, product.price, product.image);
+            });
+
+            // Append product card to container
+            imageContainer.appendChild(productCard);
         });
 
     } catch (error) {
@@ -45,6 +63,28 @@ async function fetchFeaturedProducts() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    fetchFeaturedProducts();
-})
+// Function to enlarge image in fullscreen mode & exit on click
+function enlargeImage(imgSrc) {
+    let popupImg = document.createElement("img");
+    popupImg.src = imgSrc;
+    popupImg.classList.add("fullscreen-img");
+
+    let fullscreenOverlay = document.createElement("div");
+    fullscreenOverlay.classList.add("fullscreen-overlay");
+
+    fullscreenOverlay.appendChild(popupImg);
+    document.body.appendChild(fullscreenOverlay);
+
+    fullscreenOverlay.onclick = function () {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        }
+        fullscreenOverlay.remove();
+    };
+
+    fullscreenOverlay.requestFullscreen().catch(err => {
+        console.warn("Fullscreen request failed", err);
+    });
+}
+
+
