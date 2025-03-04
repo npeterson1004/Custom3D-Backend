@@ -15,34 +15,28 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// ✅ Configure Multer Storage for Cloudinary
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: "custom3d-contact-uploads",
+        resource_type: "raw", // ✅ Ensures Cloudinary stores STL, OBJ, etc.
         public_id: (req, file) => `${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`
     }
 });
 
+
 const upload = multer({ 
     storage, 
     limits: { fileSize: 10 * 1024 * 1024 }, // ✅ Limit file size to 10MB
-    fileFilter: (req, file, cb) => {
-        const allowedTypes = ["image/jpeg", "image/png", "application/pdf", "model/stl", "model/obj"];
-        if (!allowedTypes.includes(file.mimetype)) {
-            return cb(new Error("⚠️ Invalid file type. Allowed: JPG, PNG, PDF, STL, OBJ"), false);
-        }
-        cb(null, true);
-    }
+    fileFilter // ✅ Ensures file extensions are checked
 });
-
 
 const fileFilter = (req, file, cb) => {
     const allowedExtensions = ["stl", "obj", "step", "3mf"];
-    const extension = file.originalname.split(".").pop().toLowerCase();
+    const fileExtension = file.originalname.split(".").pop().toLowerCase();
 
-    if (!allowedExtensions.includes(extension)) {
-        console.error(`⚠️ Invalid file extension: ${extension}`);
+    if (!allowedExtensions.includes(fileExtension)) {
+        console.error(`⚠️ Invalid file extension: ${fileExtension}`);
         return cb(new Error("⚠️ Invalid file type. Allowed: STL, OBJ, STEP, 3MF"), false);
     }
 
