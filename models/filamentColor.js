@@ -1,4 +1,4 @@
-//fillamentColor.js
+//models/fillamentColor.js
 
 const mongoose = require("mongoose");
 
@@ -18,4 +18,4 @@ const FilamentColorSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model("FilamentColor", FilamentColorSchema);
+module.exports = mongoose.model("filamentColor", FilamentColorSchema);

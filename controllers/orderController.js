@@ -5,18 +5,23 @@ const Order = require("../models/Order");
 exports.createOrder = async (req, res) => {
     try {
         const { userEmail, items, totalAmount } = req.body;
-        const orderDate = new Date(); // Auto-generate order date
-
+        const orderDate = new Date();
 
         // Validate required fields
         if (!userEmail || !items || items.length === 0) {
             return res.status(400).json({ error: "Missing required fields: userEmail and items." });
         }
 
-        // Create and save the order
+        // Create and save the order (Now with colors)
         const newOrder = new Order({
             userEmail,
-            items,
+            items: items.map(item => ({
+                name: item.name,
+                price: item.price,
+                image: item.image,
+                quantity: item.quantity,
+                color: item.color // ✅ Store color information
+            })),
             totalAmount,
             orderDate
         });

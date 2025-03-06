@@ -8,7 +8,11 @@ const OrderSchema = new mongoose.Schema({
             name: String,
             price: Number,
             image: String,
-            quantity: Number
+            quantity: Number,
+            color: {
+                name: String, // ✅ Store color name
+                image: String // ✅ Store color image
+            }
         }
     ],
     totalAmount: { type: Number, required: true },

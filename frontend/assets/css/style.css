@@ -96,7 +96,7 @@ html, body {
 a,a:hover,a:active,a:focus {
 	display:inline-block;
 	text-decoration:none;
-	color: #eceff3;
+	color: #c7c8c9;
 	font-size:20px;
 	padding:0;
     font-weight: 500;
@@ -208,7 +208,7 @@ nav.navbar.bootsnav {
 /*.navbar-brand*/
 .navbar-header a.navbar-brand,.navbar-header a.navbar-brand:hover,.navbar-header a.navbar-brand:focus{
     display: inline-block;
-    color: #f3f3f3;
+    color: #fffdfd;
     font-size: 24px;
     letter-spacing: 3px;
     font-family: 'Rufina', serif;
@@ -223,7 +223,7 @@ nav.navbar.bootsnav {
 
 /*.nav li*/
 nav.navbar.bootsnav ul.nav > li > a {
-    color: #e3e8ec; /* Dark blue */
+    color: #7a7c7e; /* Dark blue */
     font-size: 16px;
     font-weight: 500;
     text-transform:uppercase;
