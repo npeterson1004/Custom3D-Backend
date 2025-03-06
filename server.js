@@ -14,7 +14,7 @@ const productRoutes = require('./routes/productRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const orderRoutes = require('./routes/orderRoutes');
-
+const filamentRoutes = require('./routes/filamentRoutes');
 const app = express();
 
 // CORS Configuration
@@ -63,6 +63,7 @@ app.use('/api/products', productRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/orders", orderRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/filament-colors', filamentRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

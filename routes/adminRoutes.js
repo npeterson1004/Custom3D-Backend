@@ -4,21 +4,15 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { authMiddleware, adminMiddleware } = require("../middleware/authMiddleware");
 const { adminLogin } = require("../controllers/authController");
-const { adminLogin } = require("../controllers/adminController");
 const User = require("../models/User");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
-const multer = require("multer");
+
 
 
 
 const router = express.Router();
 
-const upload = multer({ dest: "uploads/" }); // Temporary upload folder
-// Filament Color Routes
-router.post("/filament-colors", authMiddleware, adminMiddleware, upload.single("image"), addFilamentColor);
-router.get("/filament-colors", authMiddleware, adminMiddleware, getFilamentColors);
-router.delete("/filament-colors/:id", authMiddleware, adminMiddleware, deleteFilamentColor);
 
 router.post("/login", adminLogin);
 
