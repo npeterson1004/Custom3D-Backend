@@ -5,6 +5,16 @@ const User = require('../models/User');
 const FilamentColor = require("../models/filamentColor");
 const cloudinary = require("cloudinary").v2;
 
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+
+
 exports.getDashboardData = async (req, res) => {
     try {
         const totalUsers = await User.countDocuments();
@@ -18,14 +28,7 @@ exports.getDashboardData = async (req, res) => {
 
 
 
-// Configure Cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
-// Add a new filament color
+// ✅ Add a new filament color
 exports.addFilamentColor = async (req, res) => {
     try {
         const { name, type } = req.body;
@@ -49,7 +52,7 @@ exports.addFilamentColor = async (req, res) => {
     }
 };
 
-// Get all filament colors
+// ✅ Get all filament colors
 exports.getFilamentColors = async (req, res) => {
     try {
         const colors = await FilamentColor.find();
@@ -59,7 +62,7 @@ exports.getFilamentColors = async (req, res) => {
     }
 };
 
-// Delete a filament color
+// ✅ Delete a filament color
 exports.deleteFilamentColor = async (req, res) => {
     try {
         const { id } = req.params;
