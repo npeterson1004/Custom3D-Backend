@@ -10,8 +10,8 @@ const OrderSchema = new mongoose.Schema({
             image: String,
             quantity: Number,
             color: {
-                name: String, // ✅ Store color name
-                image: String // ✅ Store color image
+                name: { type: String, default: null }, // ✅ Allow null color
+                image: { type: String, default: null } // ✅ Allow null image
             }
         }
     ],
