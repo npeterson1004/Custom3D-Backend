@@ -175,7 +175,10 @@ async function fetchOrders() {
             headers: { "Authorization": `Bearer ${token}` }
         });
 
-        if (!response.ok) throw new Error("⚠️ Failed to fetch orders.");
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`⚠️ Failed to fetch orders: ${errorMessage}`);
+        }
 
         const orders = await response.json();
         const ordersContainer = document.getElementById("ordersContainer");
@@ -187,45 +190,59 @@ async function fetchOrders() {
         }
 
         orders.forEach(order => {
-            ordersContainer.innerHTML += `
-                <tr>
-                    <td>${order.userEmail}</td>
-                    <td>
-                        ${order.items.map(item => `
-                            <div>
-                                <span class="order-quantity">${item.quantity}</span> x ${item.name}
-                                ${item.color?.image 
-                                    ? `<img src="${item.color.image}" alt="${item.color.name}" class="tiny-color-img" style="width: 20px; height: 20px;"> <span>${item.color.name}</span>`
-                                    : "<span>No color selected</span>"
-                                }
-                            </div>
-                        `).join("")}
-                    </td>
-                    <td>$${order.totalAmount.toFixed(2)}</td>
-                    <td>${new Date(order.orderDate).toLocaleString()}</td>
-                    <td>
-                        <select class="payment-status-dropdown" data-order-id="${order._id}">
-                            <option value="Pending" ${order.paymentStatus === "Pending" ? "selected" : ""}>Pending</option>
-                            <option value="Completed" ${order.paymentStatus === "Completed" ? "selected" : ""}>Completed</option>
-                        </select>
-                    </td>
-                </tr>
+            if (!order._id) {
+                console.warn("⚠️ Skipping order with missing _id:", order);
+                return;
+            }
+
+            const orderRow = document.createElement("tr");
+
+            orderRow.innerHTML = `
+                <td>${order.userEmail}</td>
+                <td>
+                    ${order.items.map(item => `
+                        <div>
+                            <span class="order-quantity">${item.quantity}</span> x ${item.name}
+                            ${item.color?.image 
+                                ? `<img src="${item.color.image}" alt="${item.color.name}" class="tiny-color-img" style="width: 20px; height: 20px;"> <span>${item.color.name}</span>`
+                                : "<span>No color selected</span>"
+                            }
+                        </div>
+                    `).join("")}
+                </td>
+                <td>$${order.totalAmount.toFixed(2)}</td>
+                <td>${new Date(order.orderDate).toLocaleString()}</td>
+                <td>
+                    <select class="payment-status-dropdown" data-order-id="${order._id}">
+                        <option value="Pending" ${order.paymentStatus === "Pending" ? "selected" : ""}>Pending</option>
+                        <option value="Processing Payment" ${order.paymentStatus === "Processing Payment" ? "selected" : ""}>Processing Payment</option>
+                        <option value="Completed" ${order.paymentStatus === "Completed" ? "selected" : ""}>Completed</option>
+                    </select>
+                </td>
             `;
+
+            ordersContainer.appendChild(orderRow);
         });
 
-        // ✅ Attach Event Listeners to Payment Status Dropdowns
-        document.querySelectorAll(".payment-status-dropdown").forEach(dropdown => {
-            dropdown.addEventListener("change", function() {
-                const orderId = this.getAttribute("data-order-id");
-                const newStatus = this.value;
-                updatePaymentStatus(orderId, newStatus);
+        // ✅ Ensure event listeners are only attached AFTER the dropdowns exist
+        setTimeout(() => {
+            document.querySelectorAll(".payment-status-dropdown").forEach(select => {
+                select.addEventListener("change", function () {
+                    const orderId = this.getAttribute("data-order-id");
+                    const newStatus = this.value;
+                    updatePaymentStatus(orderId, newStatus);
+                });
             });
-        });
+        }, 500); // ✅ Small delay to ensure DOM elements exist
 
     } catch (error) {
         console.error("❌ Error fetching orders:", error);
     }
 }
+
+
+
+
 
 
 /* ✅ Update Payment Status */
@@ -247,14 +264,15 @@ async function updatePaymentStatus(orderId, newStatus) {
         }
 
         console.log(`✅ Payment status updated successfully to ${newStatus}`);
-        
+
         // ✅ Refresh orders to reflect changes
-        fetchOrders();
+        setTimeout(fetchOrders, 500); // ✅ Delay slightly to ensure backend updates
 
     } catch (error) {
         console.error("❌ Error updating payment status:", error);
     }
 }
+
 
 
 

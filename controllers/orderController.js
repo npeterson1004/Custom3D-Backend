@@ -1,5 +1,4 @@
 // controllers/orderController.js
-// controllers/orderController.js
 const Order = require("../models/Order");
 
 // Handle order creation
@@ -43,7 +42,15 @@ exports.updatePaymentStatus = async (req, res) => {
         const { orderId } = req.params;
         const { paymentStatus } = req.body;
 
-        const updatedOrder = await Order.findByIdAndUpdate(orderId, { paymentStatus }, { new: true });
+        if (!["Pending", "Processing Payment", "Completed"].includes(paymentStatus)) {
+            return res.status(400).json({ message: "Invalid payment status." });
+        }
+
+        const updatedOrder = await Order.findByIdAndUpdate(
+            orderId, 
+            { paymentStatus }, 
+            { new: true }
+        );
 
         if (!updatedOrder) {
             return res.status(404).json({ message: "Order not found" });
