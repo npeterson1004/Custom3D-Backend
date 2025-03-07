@@ -1,5 +1,4 @@
 //Home.js
-
 import { API_BASE_URL } from "./config.js";
 
 document.addEventListener("DOMContentLoaded", fetchFeaturedProducts);
@@ -9,59 +8,134 @@ async function fetchFeaturedProducts() {
         const response = await fetch(`${API_BASE_URL}/api/products/featured`);
         const products = await response.json();
 
-        const imageContainer = document.getElementById("imageContainer");
-        if (!imageContainer) {
-            console.error("Error: 'imageContainer' not found.");
+        const featuredContainer = document.getElementById("featuredContainer");
+        if (!featuredContainer) {
+            console.error("Error: 'featuredContainer' not found.");
             return;
         }
 
-        imageContainer.innerHTML = ""; // Clear existing content
+        featuredContainer.innerHTML = ""; // Clear existing content
 
         if (products.length === 0) {
-            imageContainer.innerHTML = '<p class="text-center">No featured products available.</p>';
+            featuredContainer.innerHTML = '<p class="text-center">No featured products available.</p>';
             return;
         }
 
         products.forEach(product => {
             const productCard = document.createElement("div");
-            productCard.classList.add("featured-item");
+            productCard.classList.add("warehouse-item"); // ✅ Use the same class as warehouse
 
             productCard.innerHTML = `
                 <img src="${product.image.startsWith('http') ? product.image : API_BASE_URL + product.image}" 
-                     class="featured-img" 
+                     class="warehouse-img" 
                      alt="${product.name}">
-                <div class="featured-details">
+                <div class="warehouse-details">
                     <h5>${product.name}</h5>
                     <p>${product.description}</p>
                     <p class="order-price">$${product.price}</p>
+                    
+                    <button class="btn btn-secondary choose-color-btn" data-product-id="${product._id}">
+                        <img src="../assets/images/default-color.png" class="tiny-color-img" style="width: 20px; height: 20px; margin-right: 5px;"> 
+                        Choose Color
+                    </button>
+
                     <button class="btn btn-primary add-to-cart-btn" data-product-id="${product._id}">
                         Add to Cart
                     </button>
+
                     <button class="view-image-btn">
                         View Image
                     </button>
                 </div>
             `;
 
-            // Attach event listener to "View Image" button
+            // ✅ Attach event listener for "Choose Color"
+            productCard.querySelector(".choose-color-btn").addEventListener("click", () => {
+                openColorModal(product._id, productCard.querySelector(".choose-color-btn"));
+            });
+
+            // ✅ Attach event listener for "Add to Cart"
+            productCard.querySelector(".add-to-cart-btn").addEventListener("click", () => {
+                const colorData = productCard.querySelector(".choose-color-btn").getAttribute("data-selected-color");
+                if (!colorData) {
+                    alert("⚠️ Please select a color before adding to cart.");
+                    return;
+                }
+                const selectedColor = JSON.parse(colorData);
+                addToCart(product.name, product.price, product.image, selectedColor);
+            });
+
+            // ✅ Attach event listener for "View Image"
             productCard.querySelector(".view-image-btn").addEventListener("click", () => {
                 enlargeImage(product.image.startsWith('http') ? product.image : API_BASE_URL + product.image);
             });
 
-            // ✅ FIXED: Correctly pass parameters to `addToCart`
-            productCard.querySelector(".add-to-cart-btn").addEventListener("click", () => {
-                addToCart(product.name, product.price, product.image);
-            });
-
-            // Append product card to container
-            imageContainer.appendChild(productCard);
+            featuredContainer.appendChild(productCard);
         });
 
     } catch (error) {
-        console.error("Error fetching featured products:", error);
-        imageContainer.innerHTML = '<p class="text-center text-danger">Failed to load featured products.</p>';
+        console.error("❌ Error fetching featured products:", error);
+        featuredContainer.innerHTML = '<p class="text-center text-danger">Failed to load featured products.</p>';
     }
 }
+
+// ✅ Function to open the color selection modal with proper styling
+async function openColorModal(productId, button) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/filament-colors`);
+        const colors = await response.json();
+
+        const colorOptionsContainer = document.getElementById("colorOptions");
+        colorOptionsContainer.innerHTML = ""; // Clear previous content
+
+        colors.forEach(color => {
+            const colorOption = document.createElement("div");
+            colorOption.classList.add("color-option", "d-flex", "align-items-center", "m-2", "p-2", "border", "rounded");
+            colorOption.style.cursor = "pointer";
+            colorOption.style.display = "flex";
+            colorOption.style.alignItems = "center";
+            colorOption.style.backgroundColor = "#95d9fd"; // ✅ Light Blue Background
+            colorOption.style.transition = "background-color 0.3s ease, color 0.3s ease"; // ✅ Smooth effect
+
+            colorOption.innerHTML = `
+                <img src="${color.image}" class="color-preview" 
+                     style="width: 40px; height: 40px; margin-right: 10px; border: 2px solid black; border-radius: 5px;">
+                <span class="cart-color-text" style="color:#080808; font-size: 20px;">${color.name}</span>
+            `;
+
+            // ✅ Change Background and Text Color on Hover (but keep border black)
+            colorOption.addEventListener("mouseenter", () => {
+                colorOption.style.backgroundColor = "#034a92"; // ✅ Dark Blue Hover
+                colorOption.querySelector(".cart-color-text").style.color = "white"; // ✅ White Text
+            });
+
+            colorOption.addEventListener("mouseleave", () => {
+                colorOption.style.backgroundColor = "#7acdfa"; // ✅ Reset Background
+                colorOption.querySelector(".cart-color-text").style.color = "#080808"; // ✅ Reset Text Color
+            });
+
+            // ✅ Click Event to Select Color
+            colorOption.addEventListener("click", () => {
+                button.innerHTML = `<img src="${color.image}" class="cart-color-img" 
+                                    style="width: 20px; height: 20px; margin-right: 5px; border: 2px solid black;"> 
+                                    ${color.name}`;
+                button.setAttribute("data-selected-color", JSON.stringify(color));
+                $("#colorModal").modal("hide"); // Close modal
+            });
+
+            colorOptionsContainer.appendChild(colorOption);
+        });
+
+        $("#colorModal").modal("show"); // ✅ Show the modal
+
+    } catch (error) {
+        console.error("Error fetching filament colors:", error);
+    }
+}
+
+
+
+
 
 // Function to enlarge image in fullscreen mode & exit on click
 function enlargeImage(imgSrc) {
@@ -86,5 +160,3 @@ function enlargeImage(imgSrc) {
         console.warn("Fullscreen request failed", err);
     });
 }
-
-

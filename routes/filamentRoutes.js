@@ -20,4 +20,8 @@ router.get("/:id", getFilamentColorById);
 router.put("/:id", authMiddleware, adminMiddleware, upload.single("image"), updateFilamentColor);
 router.delete("/:id", authMiddleware, adminMiddleware, deleteFilamentColor);
 
+
+
+
+
 module.exports = router;

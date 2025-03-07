@@ -16,7 +16,9 @@ const OrderSchema = new mongoose.Schema({
         }
     ],
     totalAmount: { type: Number, required: true },
-    orderDate: { type: Date, default: Date.now }
+    orderDate: { type: Date, default: Date.now },
+    paymentMethod: { type: String, enum: ["Venmo"], required: true }, // ✅ Store Payment Method
+    paymentStatus: { type: String, enum: ["Pending", "Completed"], default: "Pending" } // ✅ Track Payment Status
 });
 
 module.exports = mongoose.model("Order", OrderSchema);

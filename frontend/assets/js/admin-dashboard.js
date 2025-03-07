@@ -1,10 +1,12 @@
 //admin-dashboard.js
+
 import { API_BASE_URL } from "./config.js";
 
+/* ✅ Ensure Admin is Authenticated Before Loading Dashboard */
 document.addEventListener("DOMContentLoaded", function () {
     console.log("🔍 Checking Admin Token on Page Load...");
-    
-    setTimeout(() => {  // ✅ Short delay to allow localStorage to update
+
+    setTimeout(() => {  
         const token = localStorage.getItem("adminToken");
         console.log("🔍 Retrieved Admin Token:", token);
 
@@ -17,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 300);
 });
 
-
+/* ✅ Function to Verify Admin Authentication */
 async function checkAdminAuth() {
     setTimeout(async () => {
         const token = localStorage.getItem("adminToken");
@@ -30,7 +32,7 @@ async function checkAdminAuth() {
         }
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/dashboard`, {  // ✅ Correct admin verification endpoint
+            const response = await fetch(`${API_BASE_URL}/api/admin/dashboard`, {
                 method: "GET",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -53,8 +55,7 @@ async function checkAdminAuth() {
     }, 500);
 }
 
-
-
+/* ✅ Load Dashboard Data */
 async function loadDashboard() {
     try {
         const token = localStorage.getItem("adminToken");
@@ -88,30 +89,25 @@ async function loadDashboard() {
     }
 }
 
-
-
-
+/* ✅ Handle Product Submission */
 document.getElementById("addProductForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const formData = new FormData(this);
     
-    // Debugging: Check if FormData contains expected values
+    // Debugging: Log FormData entries
     for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]); // This will print key-value pairs
+        console.log(pair[0] + ": " + pair[1]);
     }
 
     try {
         const token = localStorage.getItem("adminToken");
 
-const response = await fetch(`${API_BASE_URL}/api/products`, {
-    method: "POST",
-    headers: { 
-        "Authorization": `Bearer ${token}`
-    },
-    body: formData
-});
-
+        const response = await fetch(`${API_BASE_URL}/api/products`, {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${token}` },
+            body: formData
+        });
 
         const result = await response.json();
         document.getElementById("message").textContent = result.message;
@@ -125,27 +121,22 @@ const response = await fetch(`${API_BASE_URL}/api/products`, {
     }
 });
 
+/* ✅ Fetch and Display Contacts */
 async function loadContacts() {
     try {
         const token = localStorage.getItem("adminToken");
-
-        if (!token) {
-            console.error("🚨 No admin token found. Redirecting...");
-            return window.location.href = "admin-login.html";
-        }
+        if (!token) return window.location.href = "admin-login.html";
 
         const response = await fetch(`${API_BASE_URL}/api/contact`, {
             method: "GET",
             headers: { "Authorization": `Bearer ${token}` }
         });
 
-        if (!response.ok) {
-            throw new Error("⚠️ Failed to fetch contacts. Check authentication.");
-        }
+        if (!response.ok) throw new Error("⚠️ Failed to fetch contacts.");
 
         const contacts = await response.json();
         const contactsContainer = document.getElementById("contactsContainer");
-        contactsContainer.innerHTML = ""; // Clear previous entries
+        contactsContainer.innerHTML = "";
 
         if (contacts.length === 0) {
             contactsContainer.innerHTML = '<tr><td colspan="6" class="text-center">No contact requests available.</td></tr>';
@@ -153,11 +144,11 @@ async function loadContacts() {
         }
 
         contacts.forEach(contact => {
-            let fileLink = contact.fileUrl && contact.fileUrl.startsWith("http")
+            let fileLink = contact.fileUrl?.startsWith("http")
                 ? `<a href="${contact.fileUrl}" target="_blank" download>📂 Download File</a>` 
                 : "No file uploaded";
 
-            const contactRow = `
+            contactsContainer.innerHTML += `
                 <tr>
                     <td>${sanitize(contact.name)}</td>
                     <td>${sanitize(contact.email)}</td>
@@ -166,58 +157,44 @@ async function loadContacts() {
                     <td>${fileLink}</td>
                     <td>${new Date(contact.createdAt).toLocaleString()}</td>
                 </tr>`;
-            contactsContainer.innerHTML += contactRow;
         });
 
     } catch (error) {
         console.error("❌ Error loading contacts:", error);
-        document.getElementById("contactsContainer").innerHTML = '<tr><td colspan="6" class="text-center text-danger">⚠️ Failed to load contacts.</td></tr>';
     }
 }
 
-
-
-// ✅ Load contacts when the "View Contacts" tab is clicked
-document.getElementById("view-contacts-tab").addEventListener("click", loadContacts);
-
-
-
+/* ✅ Fetch and Display Orders */
 async function fetchOrders() {
     try {
         const token = localStorage.getItem("adminToken");
-
-        if (!token) {
-            console.error("🚨 No admin token found. Redirecting...");
-            return window.location.href = "admin-login.html";
-        }
+        if (!token) return window.location.href = "admin-login.html";
 
         const response = await fetch(`${API_BASE_URL}/api/orders`, {
             method: "GET",
             headers: { "Authorization": `Bearer ${token}` }
         });
 
-        if (!response.ok) {
-            throw new Error("⚠️ Failed to fetch orders. Check authentication.");
-        }
+        if (!response.ok) throw new Error("⚠️ Failed to fetch orders.");
 
         const orders = await response.json();
         const ordersContainer = document.getElementById("ordersContainer");
-        ordersContainer.innerHTML = ""; // Clear previous entries
+        ordersContainer.innerHTML = "";
 
         if (orders.length === 0) {
-            ordersContainer.innerHTML = '<tr><td colspan="5" class="text-center">No orders available.</td></tr>';
+            ordersContainer.innerHTML = '<tr><td colspan="6" class="text-center">No orders available.</td></tr>';
             return;
         }
 
         orders.forEach(order => {
-            const orderRow = `
+            ordersContainer.innerHTML += `
                 <tr>
                     <td>${order.userEmail}</td>
                     <td>
                         ${order.items.map(item => `
                             <div>
                                 <span class="order-quantity">${item.quantity}</span> x ${item.name}
-                                ${item.color && item.color.image 
+                                ${item.color?.image 
                                     ? `<img src="${item.color.image}" alt="${item.color.name}" class="tiny-color-img" style="width: 20px; height: 20px;"> <span>${item.color.name}</span>`
                                     : "<span>No color selected</span>"
                                 }
@@ -226,51 +203,97 @@ async function fetchOrders() {
                     </td>
                     <td>$${order.totalAmount.toFixed(2)}</td>
                     <td>${new Date(order.orderDate).toLocaleString()}</td>
+                    <td>
+                        <select class="payment-status-dropdown" data-order-id="${order._id}">
+                            <option value="Pending" ${order.paymentStatus === "Pending" ? "selected" : ""}>Pending</option>
+                            <option value="Completed" ${order.paymentStatus === "Completed" ? "selected" : ""}>Completed</option>
+                        </select>
+                    </td>
                 </tr>
             `;
-            ordersContainer.innerHTML += orderRow;
+        });
+
+        // ✅ Attach Event Listeners to Payment Status Dropdowns
+        document.querySelectorAll(".payment-status-dropdown").forEach(dropdown => {
+            dropdown.addEventListener("change", function() {
+                const orderId = this.getAttribute("data-order-id");
+                const newStatus = this.value;
+                updatePaymentStatus(orderId, newStatus);
+            });
         });
 
     } catch (error) {
         console.error("❌ Error fetching orders:", error);
-        document.getElementById("ordersContainer").innerHTML = '<tr><td colspan="5" class="text-center text-danger">⚠️ Failed to load orders.</td></tr>';
     }
 }
+
+
+/* ✅ Update Payment Status */
+async function updatePaymentStatus(orderId, newStatus) {
+    try {
+        const token = localStorage.getItem("adminToken");
+
+        const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/payment-status`, {
+            method: "PATCH",
+            headers: { 
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ paymentStatus: newStatus })
+        });
+
+        if (!response.ok) {
+            throw new Error("❌ Failed to update payment status.");
+        }
+
+        console.log(`✅ Payment status updated successfully to ${newStatus}`);
+        
+        // ✅ Refresh orders to reflect changes
+        fetchOrders();
+
+    } catch (error) {
+        console.error("❌ Error updating payment status:", error);
+    }
+}
+
+
 
 // ✅ Load orders when the admin page loads
 document.addEventListener("DOMContentLoaded", fetchOrders);
 
-// ✅ Load filament colors when the "View Filament Colors" tab is clicked
-document.getElementById("view-filament-colors-tab").addEventListener("click", function () {
-    console.log("📌 View Filament Colors Tab Clicked");
-    loadFilamentColors(); // ✅ Ensure colors load on click
+
+/* ✅ Tab Navigation - Ensure First Tab Doesn't Stay Active */
+document.addEventListener("DOMContentLoaded", function () {
+    const firstTab = document.querySelector(".nav-tabs .nav-item:first-child .nav-link");
+
+    // Remove 'active' class on page load
+    if (firstTab.classList.contains("active")) {
+        firstTab.classList.remove("active");
+    }
+
+    // Make sure clicking tabs behaves normally
+    document.querySelectorAll(".nav-tabs .nav-link").forEach(tab => {
+        tab.addEventListener("click", function () {
+            document.querySelectorAll(".nav-tabs .nav-link").forEach(t => t.classList.remove("active"));
+            this.classList.add("active");
+        });
+    });
 });
 
-
-
-
-// Prevent XSS attacks
+/* ✅ XSS Prevention */
 function sanitize(input) {
     return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-// Load contacts when the tab is clicked
+/* ✅ Load Necessary Data */
 document.getElementById("view-contacts-tab").addEventListener("click", loadContacts);
+document.getElementById("view-filament-colors-tab").addEventListener("click", loadFilamentColors);
+document.addEventListener("DOMContentLoaded", fetchOrders);
 
-
+/* ✅ Logout Function */
 async function logout() {
-    const token = localStorage.getItem("adminToken");
-
-    if (token) {
-        await fetch(`${API_BASE_URL}/api/auth/logout`, {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-    }
-
     localStorage.removeItem("adminToken");
     window.location.href = "admin-login.html";
 }
-
 
 loadDashboard();

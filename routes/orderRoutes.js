@@ -12,6 +12,15 @@ router.post("/", orderController.createOrder);
 // Get All Orders for Admin Dashboard (GET /api/orders)
 router.get("/", orderController.getAllOrders);
 
+
+
+
+
+// Update Order Payment Status (PATCH /api/orders/:orderId)
+router.patch("/:orderId/payment-status", orderController.updatePaymentStatus);
+
 module.exports = router;
+
+
 
 

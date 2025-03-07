@@ -93,19 +93,36 @@ data-minus-value-mobile="55" data-speed="1000">
         <h6 class="text-center">Featured Prints</h6>
         <p class="text-center">Check out our most popular prints</p>
         <div style="height: 40px;"></div>
-        <div id="imageContainer" class="featured-grid"></div> <!-- ✅ Custom Grid -->
+        <div id="featuredContainer" class="warehouse-grid"></div> <!-- ✅ Use warehouse grid class -->
+    </div>
+</section>
+
+<!-- Choose Color Modal -->
+<div id="colorModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h9 class="modal-title">Choose Filament Color</h9>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="colorOptions" class="d-flex flex-wrap justify-content-center">
+                    <!-- Colors will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
-        <!-- Lightbox Modal (Placed at the bottom of the page) -->
+<!-- Lightbox Modal (Placed at the bottom of the page) -->
 <div id="imageModal" class="modal">
     <span class="close" onclick="closeModal()">&times;</span>
     <img class="modal-content" id="fullImage">
 </div>
-
-    </div>
-</section>
-
 
     <!-- Blank Space -->
     <div style="height: 80px;"></div>
@@ -132,6 +149,7 @@ data-minus-value-mobile="55" data-speed="1000">
 <script type="module" src="../assets/js/cart.js"></script>
 <script type="module" src="../assets/js/custom.js"></script>
 <script type="module" src="../assets/js/order.js"></script>
+<script type="module" src="../assets/js/filamentColor.js"></script>
 
 
 <!-- ✅ Load jQuery & Bootstrap (WITHOUT "module") -->

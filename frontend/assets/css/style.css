@@ -130,7 +130,13 @@ h8 {
     font-weight: 500;
     text-transform: capitalize;
 }
-
+h9 { 
+	margin: 0;
+	color:#ffffff;
+    font-size: 25px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
 
 p {
 	margin: 0;
@@ -223,7 +229,7 @@ nav.navbar.bootsnav {
 
 /*.nav li*/
 nav.navbar.bootsnav ul.nav > li > a {
-    color: #7a7c7e; /* Dark blue */
+    color: #ffffff; /* Dark blue */
     font-size: 16px;
     font-weight: 500;
     text-transform:uppercase;
@@ -461,6 +467,87 @@ nav.navbar.bootsnav .navbar-toggle i{color: #094886;}
 /*====================================
         5. Item Card Styles
 ====================================*/
+/*color selector */
+
+
+/* ✅ Color Selector Modal */
+#colorModal .modal-content {
+    background-color: #034a92; /* Dark Blue Background */
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* ✅ Color Option Styling */
+.color-option {
+    background-color: #95d9fd; /* Light Blue Background */
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+/* ✅ Hover Effect */
+.color-option:hover {
+    background-color: #034a92; /* Dark Blue on Hover */
+    color: white !important; /* Change Text Color on Hover */
+    cursor: pointer;
+}
+
+/* ✅ Ensure Text Changes Color on Hover */
+.color-option:hover .cart-color-text {
+    color: white !important; /* Change text color on hover */
+}
+
+/* ✅ Add Black Border to Color Images */
+.color-option img {
+    border: 2px solid black;  /* Black border */
+    border-radius: 5px;  
+    padding: 0px;             /* Ensure no gap between image and border */
+    display: block;
+    transition: border-color 0.3s ease;
+}
+
+/* ✅ Maintain Black Border on Hover */
+.color-option:hover img {
+    border-color: black !important; /* Keep border black */
+}
+
+
+
+
+/* ✅ Default Tab Styling */
+.nav-tabs .nav-link {
+    color: #ffffff !important; /* White text */
+    font-size: 20px;
+    background-color: transparent; /* No background */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ✅ Hover Effect: Turns Dark Blue */
+.nav-tabs .nav-link:hover {
+    background-color: #034a92 !important; /* Dark Blue on Hover */
+    color: #ffffff !important; /* Keep text white */
+    border-radius: 5px; /* Slightly rounded tabs */
+}
+
+/* ✅ Active Tab Style: Stays Dark Blue */
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-link:focus,
+.nav-tabs .nav-link:visited {
+    background-color: #034a92 !important; /* Dark Blue for Active Tab */
+    color: #ffffff !important;
+    border-radius: 5px;
+}
+
+
+/* ✅ Ensure First Tab is NOT Dark Blue by Default */
+.nav-tabs .nav-item:first-child .nav-link:not(.active) {
+    background-color: transparent !important; /* Reset background */
+    color: #ffffff !important;
+}
+
 
 /*-------------------------------------
         Enlarged Image Styling
@@ -524,6 +611,9 @@ body.no-scroll {
     Buttons (View Image, Add to Cart)
 --------------------------------------*/
 
+
+
+
 /* ✅ "View Image" button styling */
 .view-image-btn {
     background-color: #008CBA; /* ✅ Blue button */
@@ -559,24 +649,6 @@ body.no-scroll {
     background-color: #002288;
 }
 
-/* ✅ Resize the color image inside the cart */
-.cart-color-img {
-    width: 25px; /* Adjust the size as needed */
-    height: 25px;
-    object-fit: cover;
-    border-radius: 50%; /* Makes it circular */
-    border: 1px solid #ccc;
-    display: inline-block;
-    margin-bottom: 5px;
-}
-
-/* ✅ Adjust product image size */
-.cart-item-img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 5px;
-}
 
 
 /*-------------------------------------
@@ -768,6 +840,23 @@ body.no-scroll {
     height: auto;
     border-radius: 5px;
     object-fit: cover;
+}
+
+
+/* ✅ Resize the color image inside the cart */
+.cart-color-img {
+    width: 15px; /* Adjust the size as needed */
+    height: 15px;
+    object-fit: cover;
+    border-radius: 50%; /* Makes it circular */
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin-bottom: 5px;
+
+}
+.cart-color-text {
+color:#080808;
+font-size: 20px;
 }
 
 /*-------------------------------------

@@ -61,23 +61,23 @@
     <div class="container mt-5">
         <div style="height: 20px;"></div>
         <h6 class="text-center">Admin Dashboard</h6>
-    
+        <div style="height: 20px;"></div>
         <!-- Tabs Navigation -->
         <ul class="nav nav-tabs" id="adminTabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="add-item-tab" data-toggle="tab" href="#add-item" role="tab" aria-controls="add-item" aria-selected="true">Add New Item</a>
+                <a class="nav-link active"  id="add-item-tab" data-toggle="tab" href="#add-item" role="tab" aria-controls="add-item" aria-selected="true">Add New Item</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="view-contacts-tab" data-toggle="tab" href="#view-contacts" role="tab" aria-controls="view-contacts" aria-selected="false">View Contacts</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="view-orders-tab" data-toggle="tab" href="#view-orders" role="tab" aria-controls="view-orders" aria-selected="false">View Orders</a>
+                <a class="nav-link"  id="view-orders-tab" data-toggle="tab" href="#view-orders" role="tab" aria-controls="view-orders" aria-selected="false">View Orders</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="add-filament-colors-tab" data-toggle="tab" href="#add-filament-colors" role="tab" aria-controls="add-filament-colors" aria-selected="false">Add Filament Colors</a>
+                <a class="nav-link"   id="add-filament-colors-tab" data-toggle="tab" href="#add-filament-colors" role="tab" aria-controls="add-filament-colors" aria-selected="false">Add Filament Colors</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="view-filament-colors-tab" data-toggle="tab" href="#view-filament-colors" role="tab" aria-controls="view-filament-colors" aria-selected="false">View Filament Colors</a>
+                <a class="nav-link"  id="view-filament-colors-tab" data-toggle="tab" href="#view-filament-colors" role="tab" aria-controls="view-filament-colors" aria-selected="false">View Filament Colors</a>
             </li>
             
         </ul>
@@ -136,22 +136,26 @@
 
     
             <!-- View Orders Tab -->
-            <div class="tab-pane fade" id="view-orders" role="tabpanel" aria-labelledby="view-orders-tab">
-                <h3>All Orders</h3>
-                <table class="table table-bordered mt-3">
-                    <thead>
-                        <tr>
-                            <th>User Email</th>
-                            <th>Items</th>
-                            <th>Total</th>
-                            <th>Order Date</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersContainer">
-                        <!-- Orders will be dynamically loaded here -->
-                    </tbody>
-                </table>
-            </div>
+<div class="tab-pane fade" id="view-orders" role="tabpanel" aria-labelledby="view-orders-tab">
+    <h3>All Orders</h3>
+    <!-- Orders Table -->
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>User Email</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Order Date</th>
+            <th>Payment Status</th>
+        </tr>
+    </thead>
+    <tbody id="ordersContainer">
+        <!-- Orders will be dynamically loaded here -->
+    </tbody>
+</table>
+
+</div>
+
 
 
 <!-- Filament Colors Tab -->
@@ -207,12 +211,13 @@
 <script type="module" src="../assets/js/config.js"></script>
 
 <!-- ✅ Admin-specific scripts -->
+ <script type="module" src="../assets/js/filamentColor.js"></script>
 <script type="module" src="../assets/js/auth.js"></script>
 <script type="module" src="../assets/js/admin-dashboard.js"></script>
 <script type="module" src="../assets/js/cart.js"></script>
 <script type="module" src="../assets/js/order.js"></script>
-<script type="module" src="../assets/js/order.js"></script>
-<script type="module" src="../assets/js/filamentColor.js"></script>
+<script type="module" src="../assets/js/payment.js"></script>
+
 
 
 <!-- ✅ Load jQuery & Bootstrap (WITHOUT "module") -->

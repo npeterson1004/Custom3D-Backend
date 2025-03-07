@@ -79,7 +79,7 @@ async function fetchWarehouseProducts() {
     }
 }
 
-// ✅ Function to open the color selection modal
+// ✅ Function to open the color selection modal with proper styling
 async function openColorModal(productId, button) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/filament-colors`);
@@ -94,14 +94,31 @@ async function openColorModal(productId, button) {
             colorOption.style.cursor = "pointer";
             colorOption.style.display = "flex";
             colorOption.style.alignItems = "center";
+            colorOption.style.backgroundColor = "#95d9fd"; // ✅ Light Blue Background
+            colorOption.style.transition = "background-color 0.3s ease, color 0.3s ease"; // ✅ Smooth effect
 
             colorOption.innerHTML = `
-                <img src="${color.image}" class="color-preview" style="width: 40px; height: 40px; margin-right: 10px;">
-                <span class="color-name">${color.name}</span>
+                <img src="${color.image}" class="color-preview" 
+                     style="width: 40px; height: 40px; margin-right: 10px; border: 2px solid black; border-radius: 5px;">
+                <span class="cart-color-text" style="color:#080808; font-size: 20px;">${color.name}</span>
             `;
 
+            // ✅ Change Background and Text Color on Hover (but keep border black)
+            colorOption.addEventListener("mouseenter", () => {
+                colorOption.style.backgroundColor = "#034a92"; // ✅ Dark Blue Hover
+                colorOption.querySelector(".cart-color-text").style.color = "white"; // ✅ White Text
+            });
+
+            colorOption.addEventListener("mouseleave", () => {
+                colorOption.style.backgroundColor = "#7acdfa"; // ✅ Reset Background
+                colorOption.querySelector(".cart-color-text").style.color = "#080808"; // ✅ Reset Text Color
+            });
+
+            // ✅ Click Event to Select Color
             colorOption.addEventListener("click", () => {
-                button.innerHTML = `<img src="${color.image}" class="tiny-color-img" style="width: 20px; height: 20px; margin-right: 5px;"> ${color.name}`;
+                button.innerHTML = `<img src="${color.image}" class="cart-color-img" 
+                                    style="width: 20px; height: 20px; margin-right: 5px; border: 2px solid black;"> 
+                                    ${color.name}`;
                 button.setAttribute("data-selected-color", JSON.stringify(color));
                 $("#colorModal").modal("hide"); // Close modal
             });
@@ -109,12 +126,13 @@ async function openColorModal(productId, button) {
             colorOptionsContainer.appendChild(colorOption);
         });
 
-        $("#colorModal").modal("show"); // Show the modal
+        $("#colorModal").modal("show"); // ✅ Show the modal
 
     } catch (error) {
         console.error("Error fetching filament colors:", error);
     }
 }
+
 
 
 // Function to enlarge image in fullscreen mode & exit on click
