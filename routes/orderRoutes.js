@@ -14,6 +14,11 @@ router.get("/", orderController.getAllOrders);
 
 
 
+// ✅ Ensure CORS middleware is properly applied
+router.options("/:orderId/payment-status", (req, res) => {
+    res.header("Access-Control-Allow-Methods", "PATCH");
+    res.send();
+});
 
 
 // Update Order Payment Status (PATCH /api/orders/:orderId)

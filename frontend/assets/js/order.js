@@ -1,7 +1,57 @@
 //order.js
 import { API_BASE_URL } from "./config.js";
 
-/* ✅ Confirm Order (Creates Order in Database) */
+/* ✅ Send Order After Payment */
+async function sendOrder() {
+    const orderId = localStorage.getItem("orderId");
+
+    if (!orderId) {
+        alert("⚠️ No order found. Please confirm your order first.");
+        return;
+    }
+
+    try {
+        showOrderProcessingMessage(); // ✅ Show processing message
+
+        const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/payment-status`, {
+            method: "PATCH",
+            headers: { 
+                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json"
+            },
+            credentials: "include", // ✅ Ensures session cookies are sent
+            body: JSON.stringify({ paymentStatus: "Completed" }) // ✅ Correctly update payment status
+        });
+
+        if (!response.ok) {
+            throw new Error(`❌ Failed to update payment status. Server responded with ${response.status}`);
+        }
+
+        document.getElementById("paymentStatus").innerHTML += `<p class="text-success">✅ Order successfully sent!</p>`;
+
+        // ✅ Clear cart after successful order
+        let userEmail = localStorage.getItem("userEmail");
+        if (userEmail) {
+            localStorage.removeItem(`cart_${userEmail}`);
+        }
+        updateCartCount();
+
+        // ✅ Hide buttons after order is sent
+        document.getElementById("sendOrderButton").style.display = "none";
+        document.getElementById("confirmPaymentButton").style.display = "none";
+
+    } catch (error) {
+        console.error("❌ Error sending order:", error);
+        alert("❌ Failed to send order. Please try again.");
+    }
+}
+
+// ✅ Ensure function is globally accessible
+window.sendOrder = sendOrder;
+
+
+
+/* ✅ Confirm Order  */
 async function confirmOrder() {
     let userEmail = localStorage.getItem("userEmail");
 
@@ -36,36 +86,21 @@ async function confirmOrder() {
     try {
         showOrderProcessingMessage(); // ✅ Show processing message
 
-        const response = await fetch(`${API_BASE_URL}/api/orders`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify(orderData)
-        });
+        // ✅ Store order locally instead of sending it to the admin yet
+        localStorage.setItem("pendingOrder", JSON.stringify(orderData));
 
-        if (!response.ok) {
-            throw new Error("❌ Order failed to create.");
-        }
-
-        const orderResponse = await response.json();
-
-        // ✅ Store Order ID for Payment Processing
-        localStorage.setItem("orderId", orderResponse.order._id);
-
-        // ✅ Show Order Confirmation Message
-        showOrderConfirmationMessage();
-
-        // ✅ Enable Proceed to Payment Button
+        // ✅ Show Proceed to Payment Button (User must click this next)
         document.getElementById("proceedToPaymentButton").style.display = "block";
+
+        showOrderConfirmationMessage();
 
     } catch (error) {
         console.error("❌ Error confirming order:", error);
         alert("❌ Order confirmation failed. Please try again.");
     }
 }
+
+
 
 
 
