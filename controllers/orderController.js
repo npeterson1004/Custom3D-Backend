@@ -1,15 +1,16 @@
 // controllers/orderController.js
+// controllers/orderController.js
 const Order = require("../models/Order");
 
 // Handle order creation
 exports.createOrder = async (req, res) => {
     try {
-        const { userEmail, items, totalAmount } = req.body;
+        const { userEmail, items, totalAmount, paymentMethod } = req.body;
         const orderDate = new Date();
 
         // Validate required fields
-        if (!userEmail || !items || items.length === 0) {
-            return res.status(400).json({ error: "Missing required fields: userEmail and items." });
+        if (!userEmail || !items || items.length === 0 || !paymentMethod) {
+            return res.status(400).json({ error: "Missing required fields: userEmail, items, or paymentMethod." });
         }
 
         // Create and save the order (Now with colors)
@@ -23,7 +24,9 @@ exports.createOrder = async (req, res) => {
                 color: item.color // ✅ Store color information
             })),
             totalAmount,
-            orderDate
+            orderDate,
+            paymentMethod, // ✅ Store Payment Method
+            paymentStatus: "Pending" // ✅ Mark as pending
         });
 
         await newOrder.save();
@@ -31,17 +34,6 @@ exports.createOrder = async (req, res) => {
     } catch (error) {
         console.error("Error saving order:", error);
         res.status(500).json({ error: "Failed to place order." });
-    }
-};
-
-// Get all orders (Admin View)
-exports.getAllOrders = async (req, res) => {
-    try {
-        const orders = await Order.find().select("userEmail items totalAmount orderDate paymentStatus");
-        res.status(200).json(orders);
-    } catch (error) {
-        console.error("Error fetching orders:", error);
-        res.status(500).json({ error: "Failed to fetch orders." });
     }
 };
 
@@ -63,3 +55,16 @@ exports.updatePaymentStatus = async (req, res) => {
         res.status(500).json({ message: "Failed to update payment status" });
     }
 };
+
+
+// Get all orders (Admin View)
+exports.getAllOrders = async (req, res) => {
+    try {
+        const orders = await Order.find().select("userEmail items totalAmount orderDate paymentStatus");
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        res.status(500).json({ error: "Failed to fetch orders." });
+    }
+};
+
