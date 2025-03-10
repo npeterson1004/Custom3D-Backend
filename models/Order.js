@@ -10,9 +10,9 @@ const OrderSchema = new mongoose.Schema({
             image: String,
             quantity: Number,
             color: {
-                name: { type: String, default: null }, // ✅ Allow null color
-                image: { type: String, default: null } // ✅ Allow null image
-            }
+                name: { type: String, default: null },
+                images: [{ type: String, default: [] }] // ✅ Store both images as an array
+            }            
         }
     ],
     totalAmount: { type: Number, required: true },
