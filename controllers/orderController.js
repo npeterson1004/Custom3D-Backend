@@ -12,7 +12,7 @@ exports.createOrder = async (req, res) => {
             return res.status(400).json({ error: "Missing required fields: userEmail, items, or paymentMethod." });
         }
 
-        // Create and save the order (Now with colors)
+        // ✅ Store full color details, including both images
         const newOrder = new Order({
             userEmail,
             items: items.map(item => ({
@@ -20,21 +20,24 @@ exports.createOrder = async (req, res) => {
                 price: item.price,
                 image: item.image,
                 quantity: item.quantity,
-                color: item.color // ✅ Store color information
+                color: item.color 
+                    ? { name: item.color.name, images: item.color.images } // ✅ Store both images
+                    : null
             })),
             totalAmount,
             orderDate,
-            paymentMethod, // ✅ Store Payment Method
-            paymentStatus: "Pending" // ✅ Mark as pending
+            paymentMethod, 
+            paymentStatus: "Pending"
         });
 
         await newOrder.save();
         res.status(201).json({ message: "Order placed successfully!", order: newOrder });
     } catch (error) {
-        console.error("Error saving order:", error);
+        console.error("❌ Error saving order:", error);
         res.status(500).json({ error: "Failed to place order." });
     }
 };
+
 
 // ✅ Allow Admin to Update Payment Status
 exports.updatePaymentStatus = async (req, res) => {
@@ -68,10 +71,23 @@ exports.updatePaymentStatus = async (req, res) => {
 exports.getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find().select("userEmail items totalAmount orderDate paymentStatus");
-        res.status(200).json(orders);
+
+        // ✅ Ensure the response includes full color details
+        const formattedOrders = orders.map(order => ({
+            ...order._doc,
+            items: order.items.map(item => ({
+                ...item,
+                color: item.color 
+                    ? { name: item.color.name, images: item.color.images } // ✅ Retrieve both images
+                    : null
+            }))
+        }));
+
+        res.status(200).json(formattedOrders);
     } catch (error) {
-        console.error("Error fetching orders:", error);
+        console.error("❌ Error fetching orders:", error);
         res.status(500).json({ error: "Failed to fetch orders." });
     }
 };
+
 
