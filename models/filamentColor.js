@@ -8,8 +8,8 @@ const FilamentColorSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    image: {
-        type: String,
+    images: {  // ✅ Change from single image to an array of images
+        type: [String],  // ✅ Array of image URLs
         required: true
     },
     type: {
@@ -18,4 +18,5 @@ const FilamentColorSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model("filamentColor", FilamentColorSchema);
+module.exports = mongoose.model("FilamentColor", FilamentColorSchema);
+

@@ -9,24 +9,27 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// ✅ Add a new filament color
+// ✅ Add a new filament color with two images
 exports.addFilamentColor = async (req, res) => {
     try {
         const { name, type } = req.body;
+        if (!req.files || req.files.length !== 2) {
+            return res.status(400).json({ message: "Exactly two images are required." });
+        }
 
-        // Upload image to Cloudinary
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: "filament_colors"
-        });
+        // Upload both images to Cloudinary
+        const imageUploads = await Promise.all(
+            req.files.map(file => cloudinary.uploader.upload(file.path, { folder: "filament_colors" }))
+        );
 
         const newColor = new FilamentColor({
             name,
-            image: result.secure_url,
+            images: imageUploads.map(upload => upload.secure_url), // ✅ Store both image URLs
             type
         });
 
         await newColor.save();
-        res.status(201).json({ message: "Filament color added successfully!" });
+        res.status(201).json({ message: "Filament color added successfully!", color: newColor });
     } catch (error) {
         console.error("Error adding filament color:", error);
         res.status(500).json({ message: "Server error." });
@@ -58,19 +61,19 @@ exports.getFilamentColorById = async (req, res) => {
 exports.updateFilamentColor = async (req, res) => {
     try {
         const { name, type } = req.body;
+        let images = req.body.images || [];
 
-        // Check if there's a new image to upload
-        let image = req.body.image;
-        if (req.file) {
-            const result = await cloudinary.uploader.upload(req.file.path, {
-                folder: "filament_colors"
-            });
-            image = result.secure_url;
+        // If new images are uploaded, replace existing ones
+        if (req.files && req.files.length === 2) {
+            const imageUploads = await Promise.all(
+                req.files.map(file => cloudinary.uploader.upload(file.path, { folder: "filament_colors" }))
+            );
+            images = imageUploads.map(upload => upload.secure_url);
         }
 
         const updatedColor = await FilamentColor.findByIdAndUpdate(
             req.params.id,
-            { name, type, image },
+            { name, type, images },
             { new: true }
         );
 
