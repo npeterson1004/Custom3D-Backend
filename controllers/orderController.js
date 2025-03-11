@@ -1,29 +1,32 @@
 // controllers/orderController.js
 const Order = require("../models/Order");
 
-// Handle order creation
 exports.createOrder = async (req, res) => {
     try {
         const { userEmail, items, totalAmount, paymentMethod } = req.body;
         const orderDate = new Date();
 
-        // Validate required fields
         if (!userEmail || !items || items.length === 0 || !paymentMethod) {
             return res.status(400).json({ error: "Missing required fields: userEmail, items, or paymentMethod." });
         }
 
-        // ✅ Store full color details, including both images
+        // ✅ Ensure each item includes `name`, `quantity`, and `color.name`
+        const formattedItems = items.map(item => ({
+            name: item.name && item.name.trim() !== "" ? item.name : "Unnamed Item", // ✅ Prevent empty names
+            price: item.price || 0, // ✅ Ensure price exists
+            quantity: item.quantity || 1, // ✅ Ensure quantity exists
+            image: item.image || "", // ✅ Ensure image exists
+            color: item.color 
+                ? { 
+                    name: item.color.name && item.color.name.trim() !== "" ? item.color.name : "No Color Selected", // ✅ Prevent empty color names
+                    images: Array.isArray(item.color.images) ? item.color.images : [] // ✅ Ensure images exist
+                }
+                : { name: "No Color Selected", images: [] } // ✅ Default color object if missing
+        }));
+
         const newOrder = new Order({
             userEmail,
-            items: items.map(item => ({
-                name: item.name,
-                price: item.price,
-                image: item.image,
-                quantity: item.quantity,
-                color: item.color 
-                    ? { name: item.color.name, images: item.color.images } // ✅ Store both images
-                    : null
-            })),
+            items: formattedItems,
             totalAmount,
             orderDate,
             paymentMethod, 
@@ -37,6 +40,8 @@ exports.createOrder = async (req, res) => {
         res.status(500).json({ error: "Failed to place order." });
     }
 };
+
+
 
 
 // ✅ Allow Admin to Update Payment Status
@@ -67,19 +72,24 @@ exports.updatePaymentStatus = async (req, res) => {
 };
 
 
-// Get all orders (Admin View)
 exports.getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find().select("userEmail items totalAmount orderDate paymentStatus");
 
-        // ✅ Ensure the response includes full color details
+        // ✅ Ensure all necessary fields exist before sending response
         const formattedOrders = orders.map(order => ({
             ...order._doc,
             items: order.items.map(item => ({
-                ...item,
+                name: item.name && item.name.trim() !== "" ? item.name : "Unnamed Item", // ✅ Ensure name exists
+                price: item.price || 0, // ✅ Ensure price exists
+                quantity: item.quantity || 1, // ✅ Ensure quantity exists
+                image: item.image || "", // ✅ Ensure image exists
                 color: item.color 
-                    ? { name: item.color.name, images: item.color.images } // ✅ Retrieve both images
-                    : null
+                    ? { 
+                        name: item.color.name && item.color.name.trim() !== "" ? item.color.name : "No Color Selected", // ✅ Ensure color name exists
+                        images: Array.isArray(item.color.images) ? item.color.images : [] // ✅ Ensure images exist
+                    }
+                    : { name: "No Color Selected", images: [] } // ✅ Default color object if missing
             }))
         }));
 
@@ -89,5 +99,6 @@ exports.getAllOrders = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch orders." });
     }
 };
+
 
 

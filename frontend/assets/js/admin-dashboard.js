@@ -164,7 +164,6 @@ async function loadContacts() {
     }
 }
 
-/* ✅ Fetch and Display Orders */
 async function fetchOrders() {
     try {
         const token = localStorage.getItem("adminToken");
@@ -189,38 +188,38 @@ async function fetchOrders() {
         orders.forEach(order => {
             const orderRow = document.createElement("tr");
 
-            // ✅ Determine the color based on the payment status
-            let statusColor = "";
-            if (order.paymentStatus === "Completed") statusColor = "status-completed";
-            else if (order.paymentStatus === "Processing Payment") statusColor = "status-processing";
-            else statusColor = "status-pending"; // Default for pending
-
+            // ✅ Ensure `name` and `quantity` exist
             orderRow.innerHTML = `
-                <td>${order.userEmail}</td>
+                <td>${order.userEmail || "Unknown User"}</td>
                 <td>
-                    ${order.items.map(item => `
-                        <div>
-                            <span class="order-quantity">${item.quantity}</span> x ${item.name}
-                            ${item.color?.image 
-                                ? `<img src="${item.color.image}" alt="${item.color.name}" class="tiny-color-img" style="width: 20px; height: 20px;"> <span>${item.color.name}</span>`
-                                : "<span>No color selected</span>"
-                            }
-                        </div>
-                    `).join("")}
+                    ${order.items.map(item => {
+                        const itemName = item.name || "Unnamed Item"; // ✅ Ensure name exists
+                        const itemQuantity = item.quantity || 1; // ✅ Ensure quantity exists
+                        const colorName = item.color?.name || "No Color Selected"; // ✅ Ensure color name exists
+                        const colorImages = Array.isArray(item.color?.images) ? item.color.images : [];
+                        const colorImage1 = colorImages.length > 0 ? colorImages[0] : "../assets/images/default-color.png";
+                        const colorImage2 = colorImages.length > 1 ? colorImages[1] : "../assets/images/default-color.png";
+
+                        return `
+                            <div>
+                                <span class="order-quantity">${itemQuantity}</span> x ${itemName}
+                                <br>
+                                <img src="${colorImage1}" alt="${colorName}" class="tiny-color-img" style="width: 30px; height: 30px;">
+                                <img src="${colorImage2}" alt="${colorName}" class="tiny-color-img" style="width: 30px; height: 30px;">
+                                <br>
+                                <span>${colorName}</span>
+                            </div>
+                        `;
+                    }).join("")}
                 </td>
                 <td>$${order.totalAmount.toFixed(2)}</td>
                 <td>${new Date(order.orderDate).toLocaleString()}</td>
-                <td>
-                    <select class="payment-status-dropdown ${statusColor}" data-order-id="${order._id}">
-                        <option value="Pending" ${order.paymentStatus === "Pending" ? "selected" : ""}>Pending</option>
-                        <option value="Processing Payment" ${order.paymentStatus === "Processing Payment" ? "selected" : ""}>Processing Payment</option>
-                        <option value="Completed" ${order.paymentStatus === "Completed" ? "selected" : ""}>Completed</option>
-                    </select>
-                </td>
+                <td>${order.paymentStatus}</td>
             `;
 
             ordersContainer.appendChild(orderRow);
         });
+
 
         // ✅ Attach event listeners after adding rows
         document.querySelectorAll(".payment-status-dropdown").forEach(select => {
@@ -235,6 +234,8 @@ async function fetchOrders() {
         console.error("❌ Error fetching orders:", error);
     }
 }
+
+
 
 
 
