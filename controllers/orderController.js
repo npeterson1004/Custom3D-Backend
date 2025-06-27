@@ -1,9 +1,14 @@
 // controllers/orderController.js
 const Order = require("../models/Order");
 
+function generateOrderNumber() {
+    const now = new Date();
+    return `ORD-${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}-${Math.floor(1000 + Math.random() * 9000)}`;
+}
+
 exports.createOrder = async (req, res) => {
     try {
-        const { userEmail, username, items, totalAmount, paymentMethod } = req.body;
+        const { userEmail, items, totalAmount, paymentMethod } = req.body;
         const orderDate = new Date();
 
         if (!userEmail || !items || items.length === 0 || !paymentMethod) {
@@ -25,13 +30,13 @@ exports.createOrder = async (req, res) => {
         }));
 
         const newOrder = new Order({
-            username,
             userEmail,
             items: formattedItems,
             totalAmount,
             orderDate,
             paymentMethod, 
-            paymentStatus: "Pending"
+            paymentStatus: "Pending",
+            orderNumber: generateOrderNumber()
         });
 
         await newOrder.save();
