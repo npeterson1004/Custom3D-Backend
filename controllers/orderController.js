@@ -3,7 +3,7 @@ const Order = require("../models/Order");
 
 exports.createOrder = async (req, res) => {
     try {
-        const { userEmail, items, totalAmount, paymentMethod } = req.body;
+        const { userEmail, username, items, totalAmount, paymentMethod } = req.body;
         const orderDate = new Date();
 
         if (!userEmail || !items || items.length === 0 || !paymentMethod) {
@@ -25,6 +25,7 @@ exports.createOrder = async (req, res) => {
         }));
 
         const newOrder = new Order({
+            username,
             userEmail,
             items: formattedItems,
             totalAmount,
