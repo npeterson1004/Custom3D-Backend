@@ -80,7 +80,7 @@ exports.updatePaymentStatus = async (req, res) => {
 
 exports.getAllOrders = async (req, res) => {
     try {
-        const orders = await Order.find().select("userEmail items totalAmount orderDate paymentStatus");
+        const orders = await Order.find().select("orderNumber userEmail items totalAmount orderDate paymentStatus");
 
         // ✅ Ensure all necessary fields exist before sending response
         const formattedOrders = orders.map(order => ({

@@ -15,7 +15,7 @@ exports.processVenmoPayment = async (req, res) => {
         res.status(200).json({
             message: "Payment request sent. Complete payment in Venmo.",
             venmoUsername: venmoUsername,
-            orderID: orderId
+            orderId: orderId
         });
     } catch (error) {
         console.error("❌ Error processing Venmo payment:", error);
