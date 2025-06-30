@@ -1,226 +1,174 @@
+<div align="center">
 
-|=======================================|
-    Custom3D Webstore
-    Created by: Nathan Peterson
-    Description: The 3D Print Webstore
-    Date: 3/4/25
-|=======================================|
+<img src="https://natescustom3d.com/assets/images/welcome-hero/welcome-banner.jpg" alt="Custom3D Logo" width="200" />
 
+# 🧰 **Nate's Custom3D Webstore**
+### *Your Hub for Personalized 3D Printing Services*
 
-📌 Project Overview
-The 3D Print Webstore is a full-stack e-commerce platform designed to manage and sell custom 3D-printed items. It enables users to browse products, add items to their cart, register and log in securely, place orders, and submit inquiries with 3D model file uploads.
-The platform utilizes:
-Secure user authentication with JWT, password hashing, and session-based security for admin access.
-Admin Dashboard for managing products, users, orders, and customer inquiries.
-Cloudinary storage for images and 3D model files (STL, OBJ, STEP, 3MF) to ensure reliable file handling.
-MongoDB as a cloud database to store users, products, orders, and contact requests.
-RESTful API architecture built with Node.js, Express.js, and MongoDB for efficient backend operations.
-Frontend developed with HTML, CSS, JavaScript, and Bootstrap, offering a dynamic user experience with AJAX-powered updates.
-The project includes order management, file uploads, and an admin-controlled inventory system, making it a fully functional e-commerce solution for custom 3D printing services.
+---
+
+🚀 **Created by:** Nathan Peterson  
+🗓️ **Date:** March 4, 2025  
+📁 **Project Type:** Full-Stack E-Commerce Platform  
+🌐 **Live Site:** [natescustom3d.com](https://natescustom3d.com)
+
+---
+
+</div>
 
 
+# 📌 Project Overview
 
+The **3D Print Webstore** is a full-stack e‑commerce platform designed to manage and sell custom 3D‑printed items. It enables users to browse products, add items to their cart, register and log in securely, place orders, and submit inquiries with 3D model file uploads.
 
+**Tech Stack**  
+- **Backend**: Node.js, Express.js, MongoDB Atlas  
+- **Frontend**: HTML, CSS, JavaScript, Bootstrap, AJAX  
+- **Storage**: Cloudinary (images & 3D model files)  
+- **Auth**: JWT for users, session-based for admins  
+- **Deployment**: Render (backend), Netlify (frontend)
 
+---
 
+## 🚀 Features
 
+### 🛍 Public Pages  
+- **Home Page** (`index.html`) – Featured products & store info  
+- **Warehouse Page** (`warehouse.html`) – List of all available 3D-printed items  
+- **Contact Page** (`contact.html`) – Send inquiries with 3D model file uploads (STL, OBJ, STEP, 3MF)  
+- **Cart Page** (`cart.html`) – Add/remove items and proceed to checkout  
+- **Find Prints Page** (`find-prints.html`) – Search for available 3D prints  
 
+### 🔒 User Authentication  
+- **Login Page** (`login.html`) – JWT-secured user login  
+- **Register Page** (`register.html`) – Secure user registration with password hashing  
+- **Logout** – Securely logs users out and clears their session  
 
+### 🛠️ Admin Functionality  
+- **Admin Login** (`admin-login.html`) – Authenticate admin users securely  
+- **Admin Dashboard** (`admin-dashboard.html`) – Manage:  
+  - **Products** – Add/Edit/Delete 3D print items  
+  - **Users** – View/manage registered customers  
+  - **Contact Requests** – View/download 3D model file submissions  
+  - **Orders** – View/manage customer orders  
 
-🚀 Features
-🛍 Public Pages
-✔️ Home Page (index.html) – Displays featured products and store information.
-✔️ Warehouse Page (warehouse.html) – Lists all 3D-printed items available for purchase.
-✔️ Contact Page (contact.html) – Allows users to send inquiries with file uploads (supports STL, OBJ, STEP, 3MF files).
-✔️ Cart Page (cart.html) – Users can add/remove items and proceed to checkout.
-✔️ Find Prints Page (find-prints.html) – Search for available 3D prints.🔒 User Authentication
-✔️ Login Page (login.html) – Secure user login using JWT authentication.
-✔️ Register Page (register.html) – Secure user registration with password hashing.
-✔️ Logout – Securely logs users out and clears their session.🛠️ Admin Functionality
-✔️ Admin Login Page (admin-login.html) – Authenticates admin users securely.
-✔️ Admin Dashboard (admin-dashboard.html) – Provides an interface for managing:
-📦 Products – Add/Edit/Delete 3D print items.
-👥 Users – View and manage registered customers.
-📩 Contact Requests – View/download file submissions from users.
-🛒 Orders – View and manage customer orders.
-✔️ Product Management:
-Upload new products (with Cloudinary-based image storage).
-Edit/Delete items from the warehouse.
-✔️ Order Management:
-View orders with customer details and purchase history.
-Manage order status and process transactions.
-✔️ Contact Management:
-View submitted inquiries (including downloadable 3D print files stored on Cloudinary).
-Respond to customer queries efficiently.
-🗄️ Database & File Management
-✔️ MongoDB (db.js) – Stores and retrieves data using Mongoose models.
-✔️ User Management – Handles authentication & authorization for users and admins.
-✔️ Product Management – CRUD operations for 3D print products.
-✔️ Order Management – Processes customer orders with a secure checkout system.
-✔️ Contact Management – Stores inquiries and uploaded 3D model files.
-✔️ Cloudinary Integration –
-📁 Stores product images dynamically for fast and secure retrieval.
-📂 Handles 3D model file uploads (STL, OBJ, STEP, 3MF) for user inquiries.
-✔️ Automatic Featured Products – Fetches random featured prints for the homepage.
+### 🗄️ Database & File Management  
+- **MongoDB Atlas** – Stores users, products, orders, and contact inquiries  
+- **Cloudinary Integration**:  
+  - Stores product images  
+  - Handles 3D model file uploads (STL, OBJ, STEP, 3MF)  
+- **Automatic Featured Products** – Randomly selects featured prints for the homepage  
 
-🔐 Security & API
-✔️ RESTful API Architecture – Handles authentication, products, orders, and contact forms.
-✔️ CORS-enabled API Requests – Ensures secure frontend-backend communication.
-✔️ JWT Authentication (authMiddleware.js) – Secure, token-based authentication for users.
-✔️ Session-Based Authentication (express-session) – Secure admin authentication.
-✔️ Password Encryption (bcrypt.js) – Encrypts passwords for enhanced security.
+### 🔐 Security & API  
+- **RESTful API** – Handles authentication, products, orders, and contact forms  
+- **CORS-enabled API** – Ensures secure client-server communication  
+- **JWT Authentication** – For user routes  
+- **Session-Based Auth** – For admin routes  
+- **Password Encryption** – Uses bcrypt  
+- **File Uploads** – Managed via Multer and Cloudinary  
 
-📡 Deployment
-🚀 Backend (Render)
-✔️ Hosted on Render (https://custom3d-backend.onrender.com).
-✔️ Automatic deployments from GitHub.
-✔️ Environment variables managed through Render's settings.
-✔️ Uses MongoDB Atlas for cloud-based database storage.
-🌎 Frontend (Netlify)
-✔️ Hosted on Netlify (https://natescustom3d.com).
-✔️ Automatic deployments from GitHub.
-✔️ Environment variables managed through Netlify settings.
-✔️ CORS-enabled API requests to the Render backend.
+---
 
-🛠️ Tech Stack
-1️⃣ Backend (Server-Side)
-✅ Programming Language:
-Node.js – JavaScript runtime for server-side logic.
-✅ Frameworks & Libraries:
-Express.js – Handles API requests and backend logic.
-Mongoose – ODM library for MongoDB schema interactions.
-dotenv – Loads environment variables securely.
-bcrypt.js – Password hashing for security.
-jsonwebtoken (JWT) – Secure user authentication.
-express-session – Handles session-based authentication.
-cookie-parser – Parses authentication tokens stored in cookies.
-cors – Enables cross-domain API communication.
-multer & Cloudinary – Handles file uploads for product images & 3D models.
-✅ Database & Storage:
-MongoDB Atlas (db.js) – Stores users, products, orders, and contact inquiries.
-Cloudinary Storage – Manages product images and file uploads.
-✅ Controllers (Business Logic):
-authController.js – Handles user/admin authentication.
-adminController.js – Manages admin-specific functionalities.
-productController.js – Handles product CRUD operations.
-contactController.js – Processes contact form submissions with file uploads.
-orderController.js – Manages customer orders.
-paymentController.js – Manages payments for orders.
-✅ Models (Database Schemas):
-User.js – Defines user schema (authentication, role-based access).
-Admin.js – Defines admin schema for secure login.
-Product.js – Stores product details, including images and stock.
-Contact.js – Stores customer inquiries and uploaded files.
-Order.js – Stores customer orders.
-Payment.js – Stores customer order payment
+## 🛠️ Tech Stack
 
+### 1️⃣ Backend (Server-Side)  
+- **Language**: Node.js  
+- **Frameworks/Libraries**: Express.js, Mongoose, dotenv, bcrypt, jsonwebtoken, express-session, cookie-parser, cors, multer, Cloudinary  
+- **Database**: MongoDB Atlas  
+- **Controllers**:  
+  - `authController.js` – User/auth logic  
+  - `adminController.js` – Admin-specific logic  
+  - `productController.js` – Product CRUD  
+  - `contactController.js` – Inquiry/file uploads  
+  - `orderController.js` – Order processing  
+  - `paymentController.js` – Payment processing  
+- **Models (Schemas)**: User, Admin, Product, Contact, Order, Payment  
+- **Middleware**: `authMiddleware.js` – JWT-based route protection  
 
-✅ Middleware:
-authMiddleware.js – Protects routes using JWT authentication.
+### 2️⃣ Frontend (Client-Side)  
+- **Languages**: HTML, CSS, JavaScript  
+- **Frameworks/Libraries**: Bootstrap, AJAX (Fetch API)  
+- **Scripts**:  
+  - `Home.js`, `Warehouse.js`, `Login.js`, `register.js`, `contact.js`,  
+    `admin-dashboard.js`, `adminlogin.js`, `cart.js`, `order.js`, `auth.js`, `config.js`
 
-2️⃣ Frontend (Client-Side)
-✅ Languages:
-HTML – Page structure.
-CSS – Styling and responsive design.
-JavaScript – User interactions & API requests.
-✅ Frameworks & Libraries:
-Bootstrap – Responsive UI framework.
-AJAX (Fetch API) – Dynamic data loading.
-✅ Frontend Scripts:
-auth.js – Handles user authentication (register, login, logout).
-adminlogin.js – Handles admin authentication.
-admin-dashboard.js – Manages admin panel functionalities (users, products, orders).
-cart.js – Manages cart operations (adding/removing items, checkout).
-contact.js – Manages the contact form (submitting inquiries with file uploads).
-config.js – Stores API configuration (e.g., API_BASE_URL).
-Home.js – Controls homepage functionality (e.g., loading featured products dynamically).
-Warehouse.js – Manages the warehouse page (fetches and displays all available products).
-register.js – Handles user registration logic.
-Login.js – Handles user login authentication.
-order.js – Manages order processing and checkout functionality.
-payment.js – Manages payment processing for checkout functionality.
+---
 
-
-
-File Structure
-
+## 📁 File Structure
+```
 Custom3D/
-│── backend/                    # Backend folder
-│   ├── controllers/             # Logic for handling routes
-│   │   ├── authController.js    # Handles user authentication (login, register)
-│   │   ├── productController.js # Handles product CRUD operations
-│   │   ├── adminController.js   # Handles admin functionalities
-│   │   ├── contactController.js # Handles contact form submissions
-│   │   ├── orderController.js # Handles order form submissions
-│   │
-│   ├── data/                    # Database-related files
-│   │   ├── db.js                # MongoDB connection setup
-│   │
-│   ├── models/                  # Database schemas
-│   │   ├── User.js              # User schema
-│   │   ├── Product.js           # Product schema
-│   │   ├── Contact.js           # Contact schema
-│   │   ├── Admin.js             # Admin schema
-│   │   ├── Order.js             # Order schema
-│   │
-│   ├── routes/                  # API Routes
-│   │   ├── authRoutes.js        # User authentication routes
-│   │   ├── productRoutes.js     # Product-related routes
-│   │   ├── adminRoutes.js       # Admin dashboard routes
-│   │   ├── contactRoutes.js     # Contact form routes
-│   │   ├── orderRoutes.js     # order routes
-│   │
-│   ├── middleware/              # Middleware functions
-│   │   ├── authMiddleware.js    # Protects routes (JWT-based auth)
-│   │
-│   ├── config/                  # Configuration files
-│   │   ├── db.js                # Database connection
-│   │
-│   ├── uploads/                 # Stores product images
-│   ├── .env                     # Environment variables (DB_URI, JWT_SECRET, etc.)
-│   ├── server.js                # Main server entry file
-│   ├── package.json             # Project dependencies
-│   ├── README.md                # Backend documentation
 │
-│
-│
-
-│── frontend/                     # Frontend folder
-│   ├── public/                    # Static assets
-│   │   ├── index.html             # Home Page
-│   │   ├── admin-login.html       # Admin login page
-│   │   ├── login.html       # User login page
-│   │   ├── admin-dashboard.html   # Admin dashboard
-│   │   ├── warehouse.html         # Warehouse product listing page
-│   │   ├── contact.html           # Contact page
-│   │   ├── cart.html           # cart page
-│   │   ├── register.html           # register page
-│   │   ├── find-prints.html       # find prints page
-│   │   ├── assets/                    # Static resources
-│   │   │   ├── css/  
-│   │   │   │   ├── styles.css         # Main CSS file
-│   │   │   ├── fonts/                 # Custom fonts
-│   │   │   ├── images/                # Static images
-│   │   │   ├── logo/                  # Brand logos
-│   │   │   ├── js/                        # JavaScript files
-│   │   │   │   ├── bootstrap/             # Bootstrap scripts
-│   │   │   │   ├── Home.js                # Home page logic
-│   │   │   │   ├── Warehouse.js           # Warehouse listing logic
-│   │   │   │   ├── Login.js               # Login page logic
-│   │   │   │   ├── register.js            # Register page logic
-│   │   │   │   ├── contact.js             # Contact page logic
-│   │   │   │   ├── admin-dashboard.js      # Admin dashboard logic
-│   │   │   │   ├── adminlogin.js      # Admin login logic
-│   │   │   │   ├── cart.js      # cart logic
-│   │   │   │   ├── order.js      # orderlogic
-│   │   │   │   ├── auth.js      # authlogic
-│   │   │   │   ├── config.js      # configlogic
+├── backend/
+│   ├── controllers/
+│   │   ├── authController.js
+│   │   ├── productController.js
+│   │   ├── adminController.js
+│   │   ├── contactController.js
+│   │   ├── orderController.js
+│   │   └── paymentController.js
 │   │
-│── README.md                      # Project documentation
-│── .gitignore                      # Files to ignore in Git
-
-
-
+│   ├── data/
+│   │   └── db.js
+│   │
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Admin.js
+│   │   ├── Product.js
+│   │   ├── Contact.js
+│   │   └── Order.js
+│   │
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   ├── productRoutes.js
+│   │   ├── adminRoutes.js
+│   │   ├── contactRoutes.js
+│   │   └── orderRoutes.js
+│   │
+│   ├── middleware/
+│   │   └── authMiddleware.js
+│   │
+│   ├── config/
+│   │   └── db.js
+│   │
+│   ├── uploads/
+│   ├── .env
+│   ├── server.js
+│   └── package.json
+│
+├── frontend/
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── admin-login.html
+│   │   ├── login.html
+│   │   ├── admin-dashboard.html
+│   │   ├── warehouse.html
+│   │   ├── contact.html
+│   │   ├── cart.html
+│   │   ├── register.html
+│   │   └── find-prints.html
+│   │
+│   └── assets/
+│       ├── css/
+│       │   └── styles.css
+│       ├── fonts/
+│       ├── images/
+│       ├── logo/
+│       └── js/
+│           ├── Home.js
+│           ├── Warehouse.js
+│           ├── Login.js
+│           ├── register.js
+│           ├── contact.js
+│           ├── admin-dashboard.js
+│           ├── adminlogin.js
+│           ├── cart.js
+│           ├── order.js
+│           ├── auth.js
+│           └── config.js
+│
+├── README.md
+└── .gitignore
+```
 
 
 
