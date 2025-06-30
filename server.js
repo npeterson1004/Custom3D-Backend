@@ -24,7 +24,8 @@ app.use(cors({
         'http://localhost:5500', // ✅ Local frontend (development)
         'http://localhost:8000', // ✅ Local API testing (Postman, browser)
         'https://natescustom3d.netlify.app', // ✅ Live frontend (Netlify)
-        'https://natescustom3d.netlify.com'
+        'https://natescustom3d.com',
+        'https://natescustom3d.com'
     ],
     credentials: true, 
     allowedHeaders: ['Content-Type', 'Authorization'],
