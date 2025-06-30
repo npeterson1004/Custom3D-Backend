@@ -10,13 +10,18 @@ exports.processVenmoPayment = async (req, res) => {
 
         console.log(`🛒 Payment request received for Order ${orderId} from ${userEmail}`);
 
-        await Order.findByIdAndUpdate(orderId, { paymentStatus: "Pending" });
+        const order = await Order.findById(orderId);
+
+        if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+        }
 
         res.status(200).json({
             message: "Payment request sent. Complete payment in Venmo.",
             venmoUsername: venmoUsername,
-            orderId: orderId
+            orderNumber: order.orderNumber // ✅ Return readable order number
         });
+        
     } catch (error) {
         console.error("❌ Error processing Venmo payment:", error);
         res.status(500).json({ message: "Payment failed. Please try again." });

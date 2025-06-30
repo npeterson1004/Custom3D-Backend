@@ -1,9 +1,23 @@
 // controllers/orderController.js
 const Order = require("../models/Order");
 
-function generateOrderNumber() {
-    const now = new Date();
-    return `ORD-${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+async function generateUniqueOrderNumber() {
+    let orderNumber;
+    let isUnique = false;
+
+    while (!isUnique) {
+        // Generate a random 6-digit number as a string (leading zeros allowed)
+        orderNumber = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+
+        // Check if it already exists
+        const existingOrder = await Order.findOne({ orderNumber });
+        if (!existingOrder) {
+            isUnique = true;
+        }
+    }
+
+    return orderNumber;
 }
 
 exports.createOrder = async (req, res) => {
@@ -28,6 +42,7 @@ exports.createOrder = async (req, res) => {
                 }
                 : { name: "No Color Selected", images: [] } // ✅ Default color object if missing
         }));
+        const orderNumber = await generateUniqueOrderNumber();
 
         const newOrder = new Order({
             userEmail,
@@ -36,7 +51,7 @@ exports.createOrder = async (req, res) => {
             orderDate,
             paymentMethod, 
             paymentStatus: "Pending",
-            orderNumber: generateOrderNumber()
+            orderNumber
         });
 
         await newOrder.save();
