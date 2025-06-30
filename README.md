@@ -7,7 +7,6 @@
 |=======================================|
 
 
-
 📌 Project Overview
 The 3D Print Webstore is a full-stack e-commerce platform designed to manage and sell custom 3D-printed items. It enables users to browse products, add items to their cart, register and log in securely, place orders, and submit inquiries with 3D model file uploads.
 The platform utilizes:
@@ -78,7 +77,7 @@ Respond to customer queries efficiently.
 ✔️ Environment variables managed through Render's settings.
 ✔️ Uses MongoDB Atlas for cloud-based database storage.
 🌎 Frontend (Netlify)
-✔️ Hosted on Netlify (https://delicate-yeot-77f124.netlify.app/public).
+✔️ Hosted on Netlify (https://natescustom3d.com).
 ✔️ Automatic deployments from GitHub.
 ✔️ Environment variables managed through Netlify settings.
 ✔️ CORS-enabled API requests to the Render backend.
@@ -106,21 +105,18 @@ adminController.js – Manages admin-specific functionalities.
 productController.js – Handles product CRUD operations.
 contactController.js – Processes contact form submissions with file uploads.
 orderController.js – Manages customer orders.
+paymentController.js – Manages payments for orders.
 ✅ Models (Database Schemas):
 User.js – Defines user schema (authentication, role-based access).
 Admin.js – Defines admin schema for secure login.
 Product.js – Stores product details, including images and stock.
 Contact.js – Stores customer inquiries and uploaded files.
 Order.js – Stores customer orders.
+Payment.js – Stores customer order payment
 
 
 ✅ Middleware:
 authMiddleware.js – Protects routes using JWT authentication.
-✅ Development Tools:
-Postman – API testing.
-Git & GitHub – Version control and collaboration.
-Nodemon – Auto-restarts the server during development.
-ngrok – Exposes local development server to external networks.
 
 2️⃣ Frontend (Client-Side)
 ✅ Languages:
@@ -142,6 +138,9 @@ Warehouse.js – Manages the warehouse page (fetches and displays all available 
 register.js – Handles user registration logic.
 Login.js – Handles user login authentication.
 order.js – Manages order processing and checkout functionality.
+payment.js – Manages payment processing for checkout functionality.
+
+
 
 File Structure
 
@@ -197,29 +196,31 @@ Custom3D/
 │   │   ├── cart.html           # cart page
 │   │   ├── register.html           # register page
 │   │   ├── find-prints.html       # find prints page
-│   │
-│   ├── assets/                    # Static resources
-│   │   ├── css/  
-│   │   │   ├── styles.css         # Main CSS file
-│   │   ├── fonts/                 # Custom fonts
-│   │   ├── images/                # Static images
-│   │   ├── logo/                  # Brand logos
-│   │   ├── js/                        # JavaScript files
-│   │   │   ├── bootstrap/             # Bootstrap scripts
-│   │   │   ├── Home.js                # Home page logic
-│   │   │   ├── Warehouse.js           # Warehouse listing logic
-│   │   │   ├── Login.js               # Login page logic
-│   │   │   ├── register.js            # Register page logic
-│   │   │   ├── contact.js             # Contact page logic
-│   │   │   ├── admin-dashboard.js      # Admin dashboard logic
-│   │   │   ├── adminlogin.js      # Admin login logic
-│   │   │   ├── cart.js      # cart logic
-│   │   │   ├── order.js      # orderlogic
-│   │   │   ├── auth.js      # authlogic
-│   │   │   ├── config.js      # configlogic
+│   │   ├── assets/                    # Static resources
+│   │   │   ├── css/  
+│   │   │   │   ├── styles.css         # Main CSS file
+│   │   │   ├── fonts/                 # Custom fonts
+│   │   │   ├── images/                # Static images
+│   │   │   ├── logo/                  # Brand logos
+│   │   │   ├── js/                        # JavaScript files
+│   │   │   │   ├── bootstrap/             # Bootstrap scripts
+│   │   │   │   ├── Home.js                # Home page logic
+│   │   │   │   ├── Warehouse.js           # Warehouse listing logic
+│   │   │   │   ├── Login.js               # Login page logic
+│   │   │   │   ├── register.js            # Register page logic
+│   │   │   │   ├── contact.js             # Contact page logic
+│   │   │   │   ├── admin-dashboard.js      # Admin dashboard logic
+│   │   │   │   ├── adminlogin.js      # Admin login logic
+│   │   │   │   ├── cart.js      # cart logic
+│   │   │   │   ├── order.js      # orderlogic
+│   │   │   │   ├── auth.js      # authlogic
+│   │   │   │   ├── config.js      # configlogic
 │   │
 │── README.md                      # Project documentation
 │── .gitignore                      # Files to ignore in Git
+
+
+
 
 
 
