@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://natescustom3d.com/assets/images/welcome-hero/welcome-banner.jpg" alt="Custom3D Logo" width="200" />
+<img src="https://natescustom3d.com/assets/images/welcome-hero/homeimage.png" alt="Custom3D Logo" width="200" />
 
 # 🧰 **Nate's Custom3D Webstore**
 ### *Your Hub for Personalized 3D Printing Services*
