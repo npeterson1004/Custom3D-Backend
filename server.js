@@ -30,7 +30,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     exposedHeaders: ['Authorization']
-}));S
+}));
 
 // ✅ Handle CORS Preflight Requests Properly
 app.options('*', cors()); // ✅ Allow preflight requests for all routes
