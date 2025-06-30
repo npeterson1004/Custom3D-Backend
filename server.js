@@ -23,13 +23,14 @@ app.use(cors({
     origin: [
         'http://localhost:5500', // ✅ Local frontend (development)
         'http://localhost:8000', // ✅ Local API testing (Postman, browser)
-        'https://natescustom3d.netlify.app' // ✅ Live frontend (Netlify)
+        'https://natescustom3d.netlify.app', // ✅ Live frontend (Netlify)
+        'https://natescustom3d.netlify.com'
     ],
     credentials: true, 
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     exposedHeaders: ['Authorization']
-}));
+}));S
 
 // ✅ Handle CORS Preflight Requests Properly
 app.options('*', cors()); // ✅ Allow preflight requests for all routes
