@@ -89,9 +89,9 @@ The **3D Print Webstore** is a full-stack e‑commerce platform designed to mana
 - **Languages**: HTML, CSS, JavaScript  
 - **Frameworks/Libraries**: Bootstrap, AJAX (Fetch API)  
 - **Scripts**:  
-  - `Home.js`, `Warehouse.js`, `Login.js`, `register.js`, `contact.js`,  
+  - `Home.js`, `Warehouse.js`, `Login.js`, `register.js`, `contact.js`, `payment.js`,  
     `admin-dashboard.js`, `adminlogin.js`, `cart.js`, `order.js`, `auth.js`, `config.js`
-
+    
 ---
 
 ## 📁 File Structure
