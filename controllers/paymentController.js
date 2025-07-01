@@ -20,7 +20,7 @@ exports.processVenmoPayment = async (req, res) => {
             message: "Payment request sent. Complete payment in Venmo.",
             venmoUsername: venmoUsername,
             orderNumber: order.orderNumber, // ✅ Return readable order numb
-            totalAmount: order.totalAmounter
+            totalAmount: order.totalAmount
         });
         
     } catch (error) {
