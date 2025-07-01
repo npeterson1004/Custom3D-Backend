@@ -22,7 +22,8 @@ async function generateUniqueOrderNumber() {
 
 exports.createOrder = async (req, res) => {
     try {
-        const { userEmail, items, totalAmount, paymentMethod } = req.body;
+        const { userEmail, items, totalAmount, paymentMethod, deliveryMethod, shippingAddress } = req.body;
+
         const orderDate = new Date();
 
         if (!userEmail || !items || items.length === 0 || !paymentMethod) {
@@ -44,14 +45,21 @@ exports.createOrder = async (req, res) => {
         }));
         const orderNumber = await generateUniqueOrderNumber();
 
+        let finalAmount = totalAmount;
+            if (deliveryMethod === "Delivery") {
+                finalAmount += 6; // Add $6 shipping fee
+            }
+
         const newOrder = new Order({
             userEmail,
             items: formattedItems,
-            totalAmount,
+            totalAmount: finalAmount,
             orderDate,
             paymentMethod, 
             paymentStatus: "Pending",
-            orderNumber
+            orderNumber,
+            deliveryMethod: deliveryMethod || "Skipped",
+            shippingAddress: deliveryMethod === "Delivery" ? shippingAddress : "Skipped"
         });
 
         await newOrder.save();
@@ -123,3 +131,13 @@ exports.getAllOrders = async (req, res) => {
 
 
 
+exports.getOrderById = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.orderId);
+        if (!order) return res.status(404).json({ error: "Order not found" });
+        res.status(200).json(order);
+    } catch (err) {
+        console.error("❌ Error fetching order:", err);
+        res.status(500).json({ error: "Failed to fetch order" });
+    }
+};

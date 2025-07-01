@@ -5,6 +5,9 @@ const OrderSchema = new mongoose.Schema({
     userEmail: { type: String, required: true },
     username: { type: String},
     orderNumber: { type: String, unique: true }, 
+    deliveryMethod: { type: String, enum: ["Delivery", "Skipped"], default: "Skipped" },
+    shippingAddress: { type: String, default: "Skipped" },
+
 
     items: [
         {

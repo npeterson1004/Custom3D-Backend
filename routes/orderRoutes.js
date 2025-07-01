@@ -19,8 +19,8 @@ router.post("/", orderController.createOrder);
 router.get("/", orderController.getAllOrders);
 
 
-
-
+// ✅ Get a single order by ID (used to show total in payment modal)
+router.get("/:orderId", orderController.getOrderById);
 
 // Update Order Payment Status (PATCH /api/orders/:orderId)
 router.patch("/:orderId/payment-status", orderController.updatePaymentStatus);
